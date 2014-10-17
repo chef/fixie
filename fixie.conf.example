@@ -1,0 +1,10 @@
+
+Fixie.configure do |mapper|
+  mapper.couchdb_uri = "http://localhost:5984"
+  mapper.couchdb_auth_database = 'opscode_account'
+  mapper.authz_uri = "http://localhost:9463"
+  mapper.superuser_id = "fa84f0f5524a06baaa10b0f988ff2d8f"
+  mapper.sql_database = 'postgres://opscode_chef:3b2bb8affc0b87233130f820443aecca2061fadc6c0df16828233e433877ca1c552d1b9d40d3971f0e8c21fc4b7ff9471d91@localhost/opscode_chef'
+end
+
+
