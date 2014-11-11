@@ -233,6 +233,19 @@ module Fixie
       primary :name
       filter_by :name, :id, :full_name, :authz_id
 
+      GlobalOrg = "0"*32
+     
+      def self.org_guid_to_name(guid)
+        "global" if guid == GlobalOrg
+        # Cache the class
+        @orgs ||= Orgs.new        
+        names = @orgs.by_id(guid).all(1)
+        if names.count == 1
+          names.first.name
+        else
+          "unknown-#{guid}"
+        end
+      end
     end
 
     class Associations < SqlTable

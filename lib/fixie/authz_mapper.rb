@@ -35,7 +35,7 @@ module Fixie
         name = object.name
         scope = 
           if object.respond_to?(:org_id) 
-              org_guid_to_name(object.org_id)
+              Fixie::Sql::Orgs.org_guid_to_name(object.org_id)
           else
             :global
           end
@@ -45,16 +45,6 @@ module Fixie
       end
     end
 
-    def org_guid_to_name(guid)
-      "global" if guid == "0"*32 
-      names = Fixie::Sql::Orgs.new.by_id(guid).all(1)
-      if names.count == 1
-        names.first.name
-      else
-        "unknown-#{guid}"
-      end
-    end
-        
     class ReverseMapper
       attr_reader :names,:by_type, :instance
                      
