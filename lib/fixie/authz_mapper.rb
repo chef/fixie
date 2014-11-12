@@ -104,9 +104,9 @@ module Fixie
           if v.kind_of?(Array)
             case k
             when 'actors'
-              h[k] = v.map {|a| mapper.authz_to_name(a,:actor) }.sort
+              h[k] = v.map {|a| mapper.authz_to_name(a,:actor) } #.sort We should sort these, but the way we're returning unknown causes sort 
             when 'groups'
-              h[k] = v.map {|a| mapper.authz_to_name(a,:group) }.sort
+              h[k] = v.map {|a| mapper.authz_to_name(a,:group) } #.sort to fail
             else
               h[k] = v
             end
