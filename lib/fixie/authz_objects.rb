@@ -142,7 +142,7 @@ module Fixie
       ace
     end
     # Todo: filter this by scope and type
-    def ace_raw(action)
+    def ace(action)
       Fixie::AuthzMapper.struct_to_name(ace_raw(action))
     end
 
@@ -196,6 +196,8 @@ module Fixie
     def type
       :group
     end
+
+    # Groups need a little more code to manage members.
     def group_raw
       authz_api.get("#{prefix}")
     end

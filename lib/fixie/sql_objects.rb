@@ -120,7 +120,7 @@ module Fixie
 #    end
 
     class Container < SqlObject
-      include AuthzGroupMixin
+      include AuthzContainerMixin
       
       def initialize(data)
         super(data)
@@ -272,7 +272,7 @@ module Fixie
     
     class Containers < SqlTable
       table :containers
-      element Sql::Containers
+      element Sql::Container
       register_authz :container, :container
       
       primary :name
