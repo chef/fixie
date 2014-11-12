@@ -71,7 +71,7 @@ module Fixie
 
     def check_action(action)
       # TODO Improve; stack trace isn't the best way to communicate with the user
-      raise "#{action} not one of #{Actions.join(', ')} " if !ACTIONS.member?(action) 
+      raise "#{action} not one of #{Actions.join(', ')} " if !Actions.member?(action) 
     end
 
     def check_actor_or_group(a_or_g)
