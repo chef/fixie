@@ -1,0 +1,28 @@
+* Small features
+These should take about an hour to implement
+** TODO add global_admin accessor to org
+** TODO find invites/assoc by orgname and username (not just id)
+** TODO remove excess includes in gemfile
+** TODO add assoc object
+*** TODO association object and table and basic tools.
+*** TODO automap to human readable org/user
+** TODO add SUPERUSER object (pivotal user)
+** TODO add brief mode (USERS->U, ORGS->O, etc)
+** TODO support editing of compressed json data
+** TODO Add :all and array of [CRUDG] to acl editing tool
+** TODO Add global constant/accessor to build a generic sequel query.
+* Medium features
+** Port check/fix association script
+** Add check/fix user script 
+*** checks that user is setup ok for each org
+*** checks acl for user
+Many users with actors in their read or other ace; that should be
+cleaned up. E.g. pivotal is cool, but
+[{"actors"=>[[:global, "pivotal"], [:global, "nathan"], [:global, "nuoyan"], [:global, "adam"]]
+** Fixie should autoconfigure from /etc/{chef/opscode} secrets and runnning config.
+
+* Testing
+** make rspec happen
+
+* Documentation
+** Document common tasks
