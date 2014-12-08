@@ -91,7 +91,6 @@ module Fixie
           funname = Relationships.plural(object)
           # defer evaluation of mapper to make sure we have a chance for everyone to initialize
           fundef = "def #{funname}; Relationships.table_class(:#{object}).new.by_org_id(org_id); end"
-          puts fundef
           self.class_eval(fundef)
         end
       end
@@ -213,14 +212,12 @@ module Fixie
 
       def self.table(name)
         fundef = "def get_table; :#{name}; end"
-        puts fundef
         self.class_eval(fundef)
       end
       # doesn't work yet
       # element Org in class Orgs will fail because it can't find Org (undefined)
       def self.element(name)
         fundef = "ElementType = name; def mk_element(x); #{name}.new(x); end"
-        puts fundef
         self.class_eval(fundef)
       end     
     end     

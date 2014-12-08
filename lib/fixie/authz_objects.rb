@@ -121,7 +121,6 @@ module Fixie
     end
     
     def acl_raw
-      puts "#{prefix}/acl"
       authz_api.get("#{prefix}/acl")
     end
     # Todo: filter this by scope and type

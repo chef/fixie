@@ -157,9 +157,8 @@ HALP
       options = {}
       OptionParser.new do |opt|
         opt.banner = "Usage: fixie [config] [options]"
-        opt.on('--couchdb-uri COUCH_URI', 'The URI of the couchdb server to connect to') { |v| options[:couchdb_uri] = v }
-        opt.on("--database ACCOUNT_DATABASE", 'The name of the opscode account database') { |v| options[:database] = v }
-        opt.on('--auth-uri AUTH_URI', "The URI of the opscode authz service") { |v| options[:auth_uri] =v }
+        opt.on('--authz_uri AUTH_URI', "The URI of the opscode authz service") { |v| options[:authz_uri] =v }
+        opt.on("--sql_database DATABASE", 'The URI of the opscode_chef database') { |v| options[:sql_database] = v }
         opt.on_tail('-h', '--help', 'Show this message') do
           puts opt
           puts "\nExample configuration file:\n\n"
@@ -181,7 +180,6 @@ HALP
     end
 
     def setup(context)
-      puts "Defining constants "
       # TODO: do we have to polute global object with this to make it available to the irb instance?
       Object.const_set(:ORGS, Fixie::Sql::Orgs.new)
       Object.const_set(:USERS, Fixie::Sql::Users.new)
