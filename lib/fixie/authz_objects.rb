@@ -6,6 +6,7 @@
 # 
 require 'yajl'
 require 'uuidtools'
+require 'rest-client'
 
 require 'fixie/config.rb'
 
@@ -19,7 +20,7 @@ module Fixie
     
     def json_helper(s)
       if s.kind_of?(Hash)
-        s.to_json
+        Yajl::Encoder.encode(s)
       else
         s
       end
@@ -71,7 +72,7 @@ module Fixie
 
     def check_action(action)
       # TODO Improve; stack trace isn't the best way to communicate with the user
-      raise "#{action} not one of #{Actions.join(', ')} " if !ACTIONS.member?(action) 
+      raise "#{action} not one of #{Actions.join(', ')} " if !Actions.member?(action) 
     end
 
     def check_actor_or_group(a_or_g)
@@ -121,7 +122,6 @@ module Fixie
     end
     
     def acl_raw
-      puts "#{prefix}/acl"
       authz_api.get("#{prefix}/acl")
     end
     # Todo: filter this by scope and type
@@ -143,7 +143,7 @@ module Fixie
       ace
     end
     # Todo: filter this by scope and type
-    def ace_raw(action)
+    def ace(action)
       Fixie::AuthzMapper.struct_to_name(ace_raw(action))
     end
 
@@ -197,6 +197,8 @@ module Fixie
     def type
       :group
     end
+
+    # Groups need a little more code to manage members.
     def group_raw
       authz_api.get("#{prefix}")
     end

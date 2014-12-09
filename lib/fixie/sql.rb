@@ -52,23 +52,5 @@ module Fixie
       Yajl::Encoder.encode(data)
     end
 
-    # Set the connection up 
-    puts "String: #{connection_string}"
-#    default_connection
-
-#    class Orgs < Sequel::Model(:orgs) 
-#    end
-#    
-#    class Users < Sequel::Model(:users) 
-#    end
-#
-#    class Associations < Sequel::Model(:org_user_associations) 
-#    end
-#
-#    class Invitations < Sequel::Model(:org_user_invites) 
-#    end
-
-
-
   end
 end
