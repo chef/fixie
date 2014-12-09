@@ -6,6 +6,7 @@
 # 
 require 'yajl'
 require 'uuidtools'
+require 'rest-client'
 
 require 'fixie/config.rb'
 
@@ -19,7 +20,7 @@ module Fixie
     
     def json_helper(s)
       if s.kind_of?(Hash)
-        s.to_json
+        Yajl::Encoder.encode(s)
       else
         s
       end
