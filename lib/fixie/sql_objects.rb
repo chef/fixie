@@ -102,7 +102,7 @@ module Fixie
         data[:id]
       end
 
-      scoped_type :container, :group, :clients, :node 
+      scoped_type :container, :group, :clients, :cookbook, :databag, :environment, :node, :role
 
       # Maybe autogenerate this from data.columns?
       ro_access :id, :authz_id, :assigned_at, :last_updated_by, :created_at, :updated_at, :name, :full_name
@@ -153,15 +153,54 @@ module Fixie
       end
       ro_access :id, :org_id, :authz_id, :last_updated_by, :created_at, :updated_at, :name
     end
-    class Node < SqlObject
-      include AuthzActorMixin
+
+    # Objects
+
+    class Cookbook < SqlObject
+      include AuthzObjectMixin
+      def initialize(data)
+        super(data)
+      end
+      ro_access :id, :org_id, :authz_id, :name
+    end
+
+    class DataBag < SqlObject
+      include AuthzObjectMixin
       def initialize(data)
         super(data)
       end
       ro_access :id, :org_id, :authz_id, :last_updated_by, :created_at, :updated_at, :name
     end
-    
 
+    # data bag item needs some prep work to do since it doesn't have authz stuff.
+
+    class Environment < SqlObject
+      include AuthzObjectMixin
+      def initialize(data)
+        super(data)
+      end
+      ro_access :id, :org_id, :authz_id, :last_updated_by, :created_at, :updated_at, :name, :serialized_object
+      # serialized_object requires work since most of the time it isn't wanted
+    end
+   
+    class Node < SqlObject
+      include AuthzObjectMixin
+      def initialize(data)
+        super(data)
+      end
+      ro_access :id, :org_id, :authz_id, :last_updated_by, :created_at, :updated_at, :name, :serialized_object
+      # serialized_object requires work since most of the time it isn't wanted
+    end
+    
+    class Role < SqlObject
+      include AuthzObjectMixin
+      def initialize(data)
+        super(data)
+      end
+      ro_access :id, :org_id, :authz_id, :last_updated_by, :created_at, :updated_at, :name, :serialized_object
+      # serialized_object requires work since most of the time it isn't wanted
+    end
+    
     #
     # 
     #
@@ -269,7 +308,7 @@ module Fixie
       primary :name
       filter_by :name, :id, :org_id, :authz_id, :last_updated_by
     end
-    
+
     class Containers < SqlTable
       table :containers
       element Sql::Container
@@ -286,6 +325,35 @@ module Fixie
       primary :name
       filter_by :name, :id, :org_id, :authz_id, :last_updated_by
     end
+
+    # Objects
+    class Cookbooks < SqlTable
+      table :cookbooks
+      element Sql::Cookbook
+      register_authz :cookbook, :object
+      
+      primary :name
+      filter_by :name, :id, :org_id, :authz_id
+    end
+
+    class DataBags < SqlTable
+      table :data_bags
+      element Sql::DataBag
+      register_authz :data_bag, :object
+      
+      primary :name
+      filter_by :name, :id, :org_id, :authz_id, :last_updated_by
+    end
+
+    class Environments < SqlTable
+      table :environments
+      element Sql::Environment
+      register_authz :environment, :object
+      
+      primary :name
+      filter_by :name, :id, :org_id, :authz_id, :last_updated_by
+    end
+
     class Nodes < SqlTable
       table :nodes
       element Sql::Node
@@ -295,7 +363,15 @@ module Fixie
       filter_by :name, :id, :org_id, :authz_id, :last_updated_by
     end
 
-
+    class Roles  < SqlTable
+      table :roles
+      element Sql::Role
+      register_authz :role, :object
+      
+      primary :name
+      filter_by :name, :id, :org_id, :authz_id, :last_updated_by
+    end
+    
 
     
   end

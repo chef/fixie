@@ -98,18 +98,14 @@ module Fixie
 #      pp :methods=>(base.methods.sort - Object.methods)
     end
 
-    def self.authz_type
+    def type
       :object
     end
-
     
     def authz_api
        @@authz_apiAsSuperUser ||= AuthzApi.new
     end
 
-    def authz_type
-      self.class.type
-    end
         
     # we expect to be mixed in with a class that has the authz_id method
     def prefix
