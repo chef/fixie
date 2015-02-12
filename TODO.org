@@ -1,5 +1,8 @@
 * Small features
 These should take about an hour to implement
+** TODO by_id has magic to grab id if there is an accessor for it. 
+   e.g. ASSOC.by_user_id(USERS['cloud_rundeck']).all
+** TODO add acl to organ
 ** TODO add global_admin accessor to org
 ** TODO find invites/assoc by orgname and username (not just id)
 ** TODO remove excess includes in gemfile
@@ -22,7 +25,8 @@ cleaned up. E.g. pivotal is cool, but
 ** Fixie should autoconfigure from /etc/{chef/opscode} secrets and runnning config.
 
 * Testing
-** make rspec happen
+** Expand testing from minimal test; 
+** Autogenerate tests for ruby metaprogramming (It's silly to have to enumerate the properties twice, once in the code and once in the test)
 
 * Documentation
 ** Document common tasks
