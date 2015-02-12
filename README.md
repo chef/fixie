@@ -1,7 +1,7 @@
 fixie
 =====
 
-Low level manipulation tool for chef server.
+Low level manipulation tool for Chef Server 12 and later.
 
 This tool is in its very early stages, and should be used with great care.
 

@@ -42,9 +42,22 @@ Each of these have accessors to search by various columns. These use the naming 
 
 The REPL supports method completion, so the list of supported filters can be found by typing `ORGS.by_` and hitting the tab key. 
 
-To get a list of all objects selected use the #all method.
+To get a list of all objects selected use the #all method. To list the names of the objects use the #list
+method:
 
-Any object that has a well defined 'name' has the index ('[]') accessor provided; this takes a string and returns a single exact match for it if it exists.
+```ruby
+fixie:0 > ORGS.list
+["acme", "ponyville", "wonderbolts"]
+fixie:0 > ORGS.all
+[#<Fixie::Sql::Org:0x00000003886fa0 @data=#< @values={:id=>"ca0542c21119786fd4d2ddeb5c920ecf", :authz_id=>"baefe78d2fdab7d31fce7f4bdd6feda8", :name=>"ponyville", :full_name=>"ponyville", :assigned_at=>2015-02-05 03:06:33 UTC, :last_updated_by=>"9f6f823739fe6417b1c247ca0d2afdfc", :created_at=>2015-02-05 03:06:33 UTC, :updated_at=>2015-02-05 03:06:33 UTC}>>, #<Fixie::Sql::Org:0x00000003886f50 @data=#< @values={:id=>"2742f6f01ae95aa5998fd7ad94e0d383", :authz_id=>"52064f4a67a2b6c0243051e9f855699a", :name=>"wonderbolts", :full_name=>"wonderbolts", :assigned_at=>2015-02-05 03:07:05 UTC, :last_updated_by=>"9f6f823739fe6417b1c247ca0d2afdfc", :created_at=>2015-02-05 03:07:05 UTC, :updated_at=>2015-02-05 03:07:05 UTC}>>, #<Fixie::Sql::Org:0x00000003886f28 @data=#< @values={:id=>"0434803f600f1688707081921cf92721", :authz_id=>"b9a9dee90b6c2ab31cf4350aeba59460", :name=>"acme", :full_name=>"acme", :assigned_at=>2015-02-05 03:07:32 UTC, :last_updated_by=>"9f6f823739fe6417b1c247ca0d2afdfc", :created_at=>2015-02-05 03:07:32 UTC, :updated_at=>2015-02-05 03:07:32 UTC}>>]
+```
+
+The #all and #list functions have protection against accidentally grabbing the entire table; if too many
+results are included (currently 10), it returns `:too_many_results` instead. Providing a parameter to the #all
+and #list function adjusts the limit.
+
+Any object that has a well defined 'name' has the index ('[]') accessor provided; this takes a string and
+returns a single exact match for it if it exists.
 
 #### Predefined objects
 * USERS

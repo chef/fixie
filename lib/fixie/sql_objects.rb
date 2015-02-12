@@ -24,6 +24,8 @@ require 'fixie/config.rb'
 require 'fixie/authz_objects.rb'
 require 'fixie/authz_mapper.rb'
 
+require 'pp'
+
 Sequel.extension :inflector
 
 module Fixie
@@ -251,6 +253,18 @@ module Fixie
       def self.primary(arg)
         name = :"by_#{arg}"
         self.class_eval("def [](arg); #{name}(arg).all(1).first; end")
+
+        listfun = <<EOLF 
+def list(max_count=10); 
+  elements = all(max_count)
+  if elements == :too_many_results 
+     elements
+  else 
+     elements.map {|e| e.#{arg} }.sort
+  end
+end
+EOLF
+        self.class_eval(listfun)
       end
 
       def self.filter_by(*args)
