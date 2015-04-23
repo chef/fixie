@@ -5,7 +5,11 @@ In the fixie directory, run `bundle install --binstubs`
 
 Configuring fixie
 -------
-You need a fixie.conf file with the appropriate URIs and secrets for
+
+On chef server installs, fixie can read configuration information out
+of /etc/opscode, specifically the chef-server-running.json file.
+
+Otherwise, you will need a fixie.conf file with the appropriate URIs and secrets for
 accessing postgres and bifrost.
 
 The fixie.conf.example file contains examples from a instance of
@@ -19,8 +23,13 @@ private chef.
 
 Running fixie
 ------
-bin/fixie fixie.conf
 
+Start fixie with
+```shell
+bin/fixie fixie.conf
+```
+The config file is optional, leaving it out will attempt to read
+/etc/opscode for configuration.
 
 Inspecting objects
 ------
