@@ -78,22 +78,15 @@ module Fixie
     def load_from_pc(dir = "/etc/opscode")
       configdir = Pathname.new(dir)
 
-      secrets_files = %w(private-chef-secrets.json)
-      secrets = load_json_from_path([configdir], secrets_files)
-
-      pp :secrets=>secrets
-      
       config_files = %w(chef-server-running.json)
       config = load_json_from_path([configdir], config_files)
-
-      pp :config=>config['private_chef'].keys
 
       authz_config = config['private_chef']['oc_bifrost']
       authz_vip = authz_config['vip']
       authz_port = authz_config['port']
       @authz_uri = "http://#{authz_vip}:#{authz_port}"
       
-      @superuser_id = secrets['oc_bifrost']['superuser_id']
+      @superuser_id = authz_config['superuser_id']
 
       sql_config = config['private_chef']['postgresql']
       
