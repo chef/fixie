@@ -90,6 +90,12 @@ module Fixie
     def check_actor_or_group(a_or_g)
       raise "#{a_or_g} not one of :actor or :group" if a_or_g != :actor && a_or_g != :group
     end
+
+    def resourcify_actor_or_group(a_or_g)
+      return a_or_g if ["actors", "groups"].member?(a_or_g)
+      check_actor_or_group(a_or_g)
+      to_resource(a_or_g)      
+    end
     
     def get_authz_id(x)
       return x.authz_id if x.respond_to?(:authz_id)
@@ -155,37 +161,58 @@ module Fixie
       Fixie::AuthzMapper.struct_to_name(ace_raw(action))
     end
 
-    
+    def expand_actions(action)
+      if action == :all
+        action = AuthzUtils::Actions
+      end
+      action.is_a?(Array) ? action : [action]
+    end
+     
+      
     
     # add actor or group to acl
     def ace_add_raw(action, actor_or_group, entity)
-      check_actor_or_group(actor_or_group)
+      # groups or actors
+      a_or_g_resource = resourcify_actor_or_group(actor_or_group)
       resource, ace = ace_get_util(action)
 
-      # groups or actors
-      a_or_g_resource = to_resource(actor_or_group)
       ace[a_or_g_resource] << get_authz_id(entity)
       ace[a_or_g_resource].uniq!
       authz_api.put("#{resource}", ace)
     end
     def ace_add(action, entity)
-      ace_add_raw(action, entity.type, entity)
+      actions = expand_actions(action)
+      actions.each {|a| ace_add_raw(a, entity.type, entity) }
     end
 
     def ace_delete_raw(action, actor_or_group, entity)
-      check_actor_or_group(actor_or_group)
+      # groups or actors
+      a_or_g_resource = resourcify_actor_or_group(actor_or_group)
       resource, ace = ace_get_util(action)
 
-      # groups or actors
-      a_or_g_resource = to_resource(actor_or_group)
       ace[a_or_g_resource] -= [get_authz_id(entity)]
       ace[a_or_g_resource].uniq!
       authz_api.put("#{resource}", ace)
     end
 
     def ace_delete(action, entity)
-      ace_delete_raw(action, entity.type, entity)
+      actions = expand_actions(action)
+      actions.each {|a| ace_delete_raw(a, entity.type, entity) }
     end
+
+    def acl_add_from_object(object)
+      src = object.acl_raw
+
+      # this could be made more efficient by refactoring ace_add_raw to split fetch and update, but this works
+      src.each do |action, ace|
+        ace.each do |type, list|
+          list.each do |item|
+            ace_add_raw(action.to_sym, type, item)
+          end
+        end
+      end
+    end
+    
   end
 
   module AuthzActorMixin 
