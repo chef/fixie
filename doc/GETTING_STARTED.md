@@ -171,6 +171,32 @@ fixie:0 > ORGS['ponyville'].clients['ponyville-validator'].ace(:read)
 {"actors"=>[[:global, "pivotal"]], "groups"=>[["ponyville", "admins"], ["ponyville", "users"]]}
 ```
 
+The ace\_add and ace\_delete functions take the symbols :create, :read, :update, :delete and :grant in
+the action field. The user can also provide an array of those symbols for bulk operations, or
+specify :all to edit all of the actions.
+
+```ruby
+fixie:0 > ORGS['ponyville'].clients['ponyville-validator'].ace_add(:all, USERS['pivotal'])
+fixie:0 > ORGS['ponyville'].clients['ponyville-validator'].ace_add([:read,:update], USERS['fluttershy'])
+```
+
+
+##### Copying ACLs
+
+Sometimes it is useful to copy permisons from one object to another. For example, if an object has
+had a catastrophic permission edit, you'd like to at least restore the permissions it would have
+inherited from the container. This command *adds* permissions from another object, but does not
+remove any permisions already there.
+
+```ruby
+fixie:0 > clients_container = ORGS['ponyville'].containers['clients']
+fixie:0 > ORGS['ponyville'].clients['ponyville-validator'].acl_add_from_object(clients_container)
+```
+
+##### Raw access
+
+
+
 There are also _raw versions of these functions that work on the raw authz ids
 ```ruby
 fixie:0 > ORGS['ponyville'].clients['ponyville-validator'].acl_raw
