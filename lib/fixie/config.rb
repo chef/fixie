@@ -34,14 +34,12 @@ module Fixie
   # ==Example Config File:
   #
   #   Fixie.configure do |mapper|
-  #     mapper.couchdb_uri = 'http://db.example.com:5984'
-  #     mapper.database = 'opscode_account'
   #     mapper.authz_uri = 'http://authz.example.com:5959'
   #   end
   #
   class Config
     include Singleton
-    KEYS = [:couchdb_uri, :couchdb_auth_database, :authz_uri, :sql_database, :superuser_id, :pivotal_key]
+    KEYS = [:authz_uri, :sql_database, :superuser_id, :pivotal_key]
     KEYS.each { |k| attr_accessor k }
 
     def merge_opts(opts={})
@@ -80,12 +78,26 @@ module Fixie
     def load_from_pc(dir = "/etc/opscode")
       configdir = Pathname.new(dir)
 
-      secrets_files = %w(private-chef-secrets.json)
-      secrets = load_json_from_path([configdir], secrets_files)
-
       config_files = %w(chef-server-running.json)
       config = load_json_from_path([configdir], config_files)
-     
+
+      authz_config = config['private_chef']['oc_bifrost']
+      authz_vip = authz_config['vip']
+      authz_port = authz_config['port']
+      @authz_uri = "http://#{authz_vip}:#{authz_port}"
+      
+      @superuser_id = authz_config['superuser_id']
+
+      sql_config = config['private_chef']['postgresql']
+      
+      sql_user = sql_config['sql_user']
+      sql_pw = sql_config['sql_password']
+      sql_vip = sql_config['vip']
+      sql_port = sql_config['port']
+      
+      @sql_database = "postgres://#{sql_user}:#{sql_pw}@#{sql_vip}/opscode_chef"
+      
+      @pivotal_key = configdir + "pivotal.pem"
     end
 
     def load_json_from_path(pathlist, filelist)
@@ -94,7 +106,8 @@ module Fixie
         filelist.each do |file|
           configfile = path + file
           if configfile.file?
-            return parser.parse(json)
+            data = File.read(configfile)
+            return parser.parse(data)
           end
         end
       end

@@ -88,6 +88,10 @@ module Fixie
       if load_config_file
         puts "loading config: #{config_file}..."
         Kernel.load(config_file)
+      else
+        path = "/etc/opscode"
+        puts "loading config from #{path}"
+        Fixie::Config.instance.load_from_pc(path)
       end
 
       Fixie::Config.instance.merge_opts(options)

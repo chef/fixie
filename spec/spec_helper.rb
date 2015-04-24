@@ -6,6 +6,16 @@
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 require 'fixie/config'
 
+def load_from_config_example
+  # load from config file
+  config_file = "fixie.conf.example"
+  Kernel.load(config_file)
+end
+
+def load_from_opscode
+  Fixie::Config::instance.load_from_pc
+end
+
 RSpec.configure do |config|
   config.run_all_when_everything_filtered = true
   config.filter_run :focus
@@ -17,8 +27,8 @@ RSpec.configure do |config|
   config.order = 'random'
 
   # configure specs
-  config_file = "fixie.conf.example"
-  Kernel.load(config_file)
+
+  load_from_opscode
   Fixie::Config.instance.merge_opts({})
   puts Fixie::Config.instance.to_text
 
@@ -28,3 +38,4 @@ RSpec.configure do |config|
   # class Users < Sequel::Model(:users) 
   require 'fixie'
 end
+
