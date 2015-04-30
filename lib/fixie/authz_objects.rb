@@ -258,7 +258,11 @@ module Fixie
     def group_delete(entity)
       group_delete_raw(entity.type, entity)
     end
-    
+
+    def member?(entity)
+      members = group_raw
+      return members[resourcify_actor_or_group(entity.type)].member?(entity.authz_id)
+    end
   end
   
 end
