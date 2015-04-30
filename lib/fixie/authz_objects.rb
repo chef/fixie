@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2014-2015 Chef Software Inc. 
+# Copyright (c) 2014-2015 Chef Software Inc.
 # License :: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 # Author: Mark Anderson <mark@chef.io>
-# 
+#
 require 'yajl'
 require 'uuidtools'
 require 'rest-client'
@@ -23,13 +23,13 @@ require 'rest-client'
 require 'fixie/config.rb'
 
 module Fixie
-  
+
   class AuthzApi
     def initialize(user=nil)
       @requestor_authz = user ? user : Fixie.configure { |x| x.superuser_id }
       @auth_uri ||= Fixie.configure { |x| x.authz_uri }
     end
-    
+
     def json_helper(s)
       if s.kind_of?(Hash)
         Yajl::Encoder.encode(s)
@@ -37,7 +37,7 @@ module Fixie
         s
       end
     end
-    
+
     def get(resource)
       result = RestClient.get("#{@auth_uri}/#{resource}", :content_type=>:json, :accept=>:json,
                               'X-Ops-Requesting-Actor-Id'=>@requestor_authz)
@@ -58,18 +58,18 @@ module Fixie
                                  'X-Ops-Requesting-Actor-Id'=>@requestor_authz)
       Yajl::Parser.parse(result)
     end
-    
+
   end
 
   module AuthzUtils
     Types = [:object,:actor,:group,:container] # order is an attempt to optimize by most probable.
     Actions = [:create, :read, :update, :delete, :grant]
-    
+
     def to_resource(t)
       # This is a rails thing... t.to_s.pluralize
       t.to_s + "s" # hack
     end
-   
+
     def get_type(id)
       Types.each do |t|
         begin
@@ -84,7 +84,7 @@ module Fixie
 
     def check_action(action)
       # TODO Improve; stack trace isn't the best way to communicate with the user
-      raise "#{action} not one of #{Actions.join(', ')} " if !Actions.member?(action) 
+      raise "#{action} not one of #{Actions.join(', ')} " if !Actions.member?(action)
     end
 
     def check_actor_or_group(a_or_g)
@@ -94,9 +94,9 @@ module Fixie
     def resourcify_actor_or_group(a_or_g)
       return a_or_g if ["actors", "groups"].member?(a_or_g)
       check_actor_or_group(a_or_g)
-      to_resource(a_or_g)      
+      to_resource(a_or_g)
     end
-    
+
     def get_authz_id(x)
       return x.authz_id if x.respond_to?(:authz_id)
       # if it quacks like an authz id
@@ -104,7 +104,7 @@ module Fixie
       raise "#{x} doesn't look like an authz_id"
     end
   end
-  
+
   #
   module AuthzObjectMixin
     include AuthzUtils # reconsider this mixin; maybe better to refer to those routines explictly
@@ -119,12 +119,12 @@ module Fixie
     def type
       :object
     end
-    
+
     def authz_api
        @@authz_apiAsSuperUser ||= AuthzApi.new
     end
 
-        
+
     # we expect to be mixed in with a class that has the authz_id method
     def prefix
       "#{to_resource(type)}/#{authz_id}"
@@ -134,7 +134,7 @@ module Fixie
       result = authz_api.get("#{prefix}/acl/#{action}/ace/#{actor.authz_id}")
       [:unparsed, result] # todo figure this out in more detail
     end
-    
+
     def acl_raw
       authz_api.get("#{prefix}/acl")
     end
@@ -167,9 +167,9 @@ module Fixie
       end
       action.is_a?(Array) ? action : [action]
     end
-     
-      
-    
+
+
+
     # add actor or group to acl
     def ace_add_raw(action, actor_or_group, entity)
       # groups or actors
@@ -200,6 +200,13 @@ module Fixie
       actions.each {|a| ace_delete_raw(a, entity.type, entity) }
     end
 
+    def ace_member?(action, entity)
+      a_or_g_resource = resourcify_actor_or_group(entity.type)
+      resource, ace = ace_get_util(action)
+      ace[a_or_g_resource].member?(entity.authz_id)
+    end
+
+
     def acl_add_from_object(object)
       src = object.acl_raw
 
@@ -212,22 +219,22 @@ module Fixie
         end
       end
     end
-    
+
   end
 
-  module AuthzActorMixin 
+  module AuthzActorMixin
     include AuthzObjectMixin
     def type
       :actor
     end
   end
-  module AuthzContainerMixin 
+  module AuthzContainerMixin
     include AuthzObjectMixin
     def type
       :container
     end
   end
-  module AuthzGroupMixin 
+  module AuthzGroupMixin
     include AuthzObjectMixin
     def type
       :group
@@ -242,14 +249,14 @@ module Fixie
       Fixie::AuthzMapper.struct_to_name(group_raw)
     end
 
-    def group_add_raw(actor_or_group, entity) 
+    def group_add_raw(actor_or_group, entity)
       entity_resource = to_resource(actor_or_group)
       authz_api.put("#{prefix}/#{entity_resource}/#{entity.authz_id}",{})
     end
     def group_add(entity)
       group_add_raw(entity.type, entity)
     end
-    
+
     def group_delete_raw(actor_or_group, entity)
       entity_resource = to_resource(actor_or_group)
       authz_api.delete("#{prefix}/#{entity_resource}/#{entity.authz_id}")
@@ -264,5 +271,5 @@ module Fixie
       return members[resourcify_actor_or_group(entity.type)].member?(entity.authz_id)
     end
   end
-  
+
 end

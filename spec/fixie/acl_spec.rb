@@ -60,7 +60,24 @@ RSpec.describe Fixie::Sql::Orgs, "ACL access" do
      
   end
 
-
+  context "ACE Membership" do
+    
+    let (:admingroup) { test_org.groups['admins'] }
+    let (:testobject) { test_org.groups['admins'] }
+    let (:notadmingroup) { test_org.groups['clients'] }
+    let (:adminuser) { users['rainbowdash'] }
+    let (:notadminuser) { users['mary'] }
+    let (:pivotal) { users['pivotal'] }
+    
+    it "Privileged users and groups are part of the read ACE" do
+      expect(testobject.ace_member?(:read, admingroup)).to be true
+      expect(testobject.ace_member?(:read, pivotal)).to be true
+    end
+    it "Unprivileged members are not part of read ACE" do
+      expect(testobject.member?(notadmingroup)).to be false
+      expect(testobject.member?(notadminuser)).to be false
+    end
+  end
 
 
 end
