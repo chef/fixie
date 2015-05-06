@@ -43,11 +43,11 @@ module Fixie
 
       # The class for the table, e.g. Orgs
       def self.table_class(name)
-        (base + name.to_s.pluralize.capitalize).constantize
+        (base + name.to_s.pluralize.camelize).constantize
       end
       # The class for one instance of the object, e.g. Org
       def self.object_class(name)
-        (base + name.to_s.singularize.capitalize).constantize
+        (base + name.to_s.singularize.camelize).constantize
       end
       def self.singular(name)
         name.to_s.singularize
@@ -116,13 +116,14 @@ module Fixie
         data[:id]
       end
 
-      scoped_type :container, :group, :clients, :cookbook, :databag, :environment, :node, :role
       def global_admins
         name = self.name
         global_admins_name = "#{name}_global_admins"
         Fixie::Sql::Groups.new["#{name}_global_admins"]
       end
 
+      scoped_type :container, :group, :client,
+                  :cookbook_artifact, :cookbook, :databag, :environment, :node, :policy, :policy_group , :role
 
       # Maybe autogenerate this from data.columns?
       ro_access :id, :authz_id, :assigned_at, :last_updated_by, :created_at, :updated_at, :name, :full_name
@@ -176,6 +177,29 @@ module Fixie
 
     # Objects
 
+    # At the time of writing there are more objects in sql than we
+    # support here; we should add them. We have only covered the
+    # objects that have their own authz info
+    # Missing objects include:
+    # checksums cookbook_artifact_version_checksums
+    # cookbook_artifact_versions cookbook_artifact_versions_id_seq
+    # cookbook_artifacts_id_seq cookbook_version_checksums
+    # cookbook_version_dependencies cookbook_versions
+    # cookbook_versions_by_rank cookbooks_id_seq data_bag_items
+    # joined_cookbook_version keys keys_by_name node_policy opc_customers
+    # opc_customers_id_seq opc_users org_migration_state
+    # org_migration_state_id_seq policy_revisions
+    # policy_revisions_policy_groups_association sandboxed_checksums
+
+
+    class CookbookArtifact < SqlObject
+      include AuthzObjectMixin
+      def initialize(data)
+        super(data)
+      end
+      ro_access :id, :org_id, :authz_id, :name
+    end
+
     class Cookbook < SqlObject
       include AuthzObjectMixin
       def initialize(data)
@@ -209,6 +233,24 @@ module Fixie
         super(data)
       end
       ro_access :id, :org_id, :authz_id, :last_updated_by, :created_at, :updated_at, :name, :serialized_object
+      # serialized_object requires work since most of the time it isn't wanted
+    end
+
+    class Policy < SqlObject
+      include AuthzObjectMixin
+      def initialize(data)
+        super(data)
+      end
+      ro_access :id, :org_id, :authz_id, :last_updated_by, :name
+      # serialized_object requires work since most of the time it isn't wanted
+    end
+
+    class PolicyGroup < SqlObject
+      include AuthzObjectMixin
+      def initialize(data)
+        super(data)
+      end
+      ro_access :id, :org_id, :authz_id, :last_updated_by, :name, :serialized_object
       # serialized_object requires work since most of the time it isn't wanted
     end
 
@@ -370,6 +412,16 @@ EOLF
     end
 
     # Objects
+    # todo check
+    class CookbookArtifacts < SqlTable
+      table :cookbook_artifacts
+      element Sql::CookbookArtifact
+      register_authz :cookbook_artifact, :object
+
+      primary :name
+      filter_by :name, :id, :org_id, :authz_id
+    end
+
     class Cookbooks < SqlTable
       table :cookbooks
       element Sql::Cookbook
@@ -404,6 +456,24 @@ EOLF
 
       primary :name
       filter_by :name, :id, :org_id, :authz_id, :last_updated_by
+    end
+
+    class Policies < SqlTable
+      table :policies
+      element Sql::Policy
+      register_authz :policy, :object
+
+      primary :name
+      filter_by :name, :id, :org_id, :authz_id
+    end
+
+    class PolicyGroups < SqlTable
+      table :policy_groups
+      element Sql::PolicyGroup
+      register_authz :policygroup, :object
+
+      primary :name
+      filter_by :name, :id, :org_id, :authz_id
     end
 
     class Roles  < SqlTable
