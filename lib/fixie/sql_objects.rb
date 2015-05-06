@@ -122,8 +122,41 @@ module Fixie
         Fixie::Sql::Groups.new["#{name}_global_admins"]
       end
 
+      # Iterators for objects in authz; using containers to enumerate things
+      # It might be better to metaprogram this up instead,
+      #
+      # TODO Write some tests to validate that this stuff
+      # works, since it depends on a lot of name magic...
+
+      NAME_FIXUP = {"data" => "data_bags", "sandboxes" => nil}
+      def each_authz_object_by_class
+        containers = self.containers.all(:all)
+        containers.each do |container|
+          name = container.name
+          name = NAME_FIXUP[name] if NAME_FIXUP.has_key?(name)
+          next if name.nil?
+
+          object_type = name.to_sym
+          #        raise Exception "No such object_type #{object_type}" unless respond_to?(object_type)
+          objects = send(object_type).all(:all)
+          if block_given?
+            yield objects
+          end
+        end
+        return
+      end
+
+      def each_authz_object
+        each_authz_object_by_class do |objectlist|
+          objectlist.each do |object|
+            yield object
+          end
+        end
+        return
+      end
+
       scoped_type :container, :group, :client,
-                  :cookbook_artifact, :cookbook, :databag, :environment, :node, :policy, :policy_group , :role
+                  :cookbook_artifact, :cookbook, :data_bag, :environment, :node, :policy, :policy_group , :role
 
       # Maybe autogenerate this from data.columns?
       ro_access :id, :authz_id, :assigned_at, :last_updated_by, :created_at, :updated_at, :name, :full_name
@@ -290,7 +323,9 @@ module Fixie
       end
 
       def all(max_count=10)
-        return :too_many_results if (inner.count > max_count)
+        if max_count != :all
+          return :too_many_results if (inner.count > max_count)
+        end
         elements = inner.all.map {|org| mk_element(org) }
       end
 
@@ -303,7 +338,7 @@ module Fixie
         self.class_eval("def [](arg); #{name}(arg).all(1).first; end")
 
         listfun = <<EOLF
-def list(max_count=10);
+def list(max_count=:all);
   elements = all(max_count)
   if elements == :too_many_results
      elements

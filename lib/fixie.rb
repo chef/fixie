@@ -22,5 +22,6 @@ require 'fixie/sql_objects'
 
 # This doesn't work because of initialization order, figure it out.
 require 'fixie/check_org_associations'
+require 'fixie/bulk_edit_permissions'
 
 Sequel.extension :inflector
