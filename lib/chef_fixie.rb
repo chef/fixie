@@ -23,5 +23,6 @@ require_relative 'chef_fixie/sql_objects'
 
 # This doesn't work because of initialization order, figure it out.
 require_relative 'chef_fixie/check_org_associations'
+require_relative 'chef_fixie/bulk_edit_permissions'
 
 Sequel.extension :inflector

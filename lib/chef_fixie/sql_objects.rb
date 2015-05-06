@@ -119,6 +119,42 @@ module ChefFixie
         ChefFixie::Sql::Groups.new["#{name}_global_admins"]
       end
 
+      # Iterators for objects in authz; using containers to enumerate things
+      # It might be better to metaprogram this up instead,
+      #
+      # TODO Write some tests to validate that this stuff
+      # works, since it depends on a lot of name magic...
+
+      NAME_FIXUP = {"data" => "data_bags", "sandboxes" => nil}
+      def objects_by_container_type(container)
+        name = NAME_FIXUP.has_key?(container) ? NAME_FIXUP[container] : container
+        return [] if name.nil?
+
+        object_type = name.to_sym
+        #        raise Exception "No such object_type #{object_type}" unless respond_to?(object_type)
+        send(object_type).all(:all)
+      end
+
+      def each_authz_object_by_class
+        containers = self.containers.all(:all)
+        containers.each do |container|
+          objects = objects_by_container_type(container.name)
+          if block_given?
+            yield objects
+          end
+        end
+        return
+      end
+
+      def each_authz_object
+        each_authz_object_by_class do |objectlist|
+          objectlist.each do |object|
+            yield object
+          end
+        end
+        return
+      end
+
       scoped_type :container, :group, :client,
                   :cookbook_artifact, :cookbook, :data_bag, :environment, :node, :policy, :policy_group , :role
 
