@@ -93,14 +93,43 @@ module Fixie
     end
 
     def self.add_admin_permissions(org)
+      org = orgs[org] if org.is_a?(String)
       # rework when ace add takes multiple items...
       admins = org.groups['admins']
       pivotal = users['pivotal']
-      org.each_authz_object_by_class do |objects|
-        ace_add(objects, :all, pivotal)
-        ace_add(objects, :all, admins)
+      org.each_authz_object do |object|
+        object.ace_add(:all, pivotal)
+        if object.class != Fixie::Sql::Group || object.name != 'billing-admins'
+          object.ace_add(:all, admins)
+        end
       end
     end    
-    
+
+    def self.check_permissions(org)
+      org = orgs[org] if org.is_a?(String)
+      admins = org.groups['admins'].authz_id
+      pivotal = users['pivotal'].authz_id
+      errors = Hash.new({})
+      org.each_authz_object do |object|
+        acl = object.acl_raw
+        broken_acl = {}
+        # the one special case
+        acl.each do |k,v|
+          list = []
+          list << "pivotal" if !v['actors'].member?(pivotal)
+          # admins doesn't belong to the billing admins group
+          if object.class != Fixie::Sql::Group || object.name != 'billing-admins'
+            list << "admins" if !v['groups'].member?(admins)
+          end
+          broken_acl[k] = list if !list.empty?
+        end
+        if !broken_acl.empty?
+          classname = object.class
+          errors[classname] = {} if !errors.has_key?(classname)
+          errors[classname][object.name] = broken_acl
+        end
+      end
+      return errors
+    end
   end
 end
