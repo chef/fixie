@@ -141,7 +141,7 @@ module Fixie
         next if c.name == "containers" || c.name == "groups"
         org.objects_by_container_type(c.name).each do |obj|
           obj.acl_add_from_object(c)
-          pp obj.name
+          puts "#{obj.name} from #{c.name}"
         end
       end
       return
