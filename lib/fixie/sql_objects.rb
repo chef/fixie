@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2014-2015 Chef Software Inc. 
+# Copyright (c) 2014-2015 Chef Software Inc.
 # License :: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 # Author: Mark Anderson <mark@chef.io>
-# 
+#
 require 'yajl'
 require 'uuidtools'
 require 'sequel'
@@ -31,7 +31,7 @@ Sequel.extension :inflector
 module Fixie
   module Sql
 
-    # Maps entity names like 'org' to the table class (Orgs) and the entity class (Org), as well as the cannonical 
+    # Maps entity names like 'org' to the table class (Orgs) and the entity class (Org), as well as the cannonical
     # each table has a name, a class to wrap the table, an row, and a class to map the row.
     # Wrapping this in a class to handle things if we have to not be consisitent with our naming.
     # table :orgs, class wrapper Orgs, row :org, class for row Org
@@ -65,7 +65,7 @@ module Fixie
       def data
         @data
       end
-      
+
       # TODO rework this to use better style
       def self.ro_access(*args)
         args.each do |field|
@@ -94,7 +94,7 @@ module Fixie
         end
       end
 
-      
+
     end
 
     class Org < SqlObject
@@ -108,7 +108,7 @@ module Fixie
           self.class_eval(fundef)
         end
       end
-      
+
       def initialize(data)
         super(data)
       end
@@ -124,7 +124,7 @@ module Fixie
 
     #
     # Some types have an org_id field and may be scoped to an org (some, like groups are able to be global as well)
-    # This sets up a filtered accessor that limits 
+    # This sets up a filtered accessor that limits
     #
 #    module ScopedType
 #      def self.included(base)
@@ -135,20 +135,20 @@ module Fixie
 
     class Container < SqlObject
       include AuthzContainerMixin
-      
+
       def initialize(data)
         super(data)
       end
-     
+
       ro_access :id, :org_id, :authz_id, :last_updated_by, :created_at, :updated_at, :name
     end
     class Group < SqlObject
       include AuthzGroupMixin
-      
+
       def initialize(data)
         super(data)
       end
-     
+
       ro_access :id, :org_id, :authz_id, :last_updated_by, :created_at, :updated_at, :name
     end
 
@@ -157,7 +157,7 @@ module Fixie
       def initialize(data)
         super(data)
       end
-      name :username      
+      name :username
       ro_access :id, :authz_id, :last_updated_by, :created_at, :updated_at, :username, :email, :public_key, :pubkey_version, :serialized_object, :external_authentication_uid, :recovery_authentication_enabled, :admin, :hashed_password, :salt, :hash_type
     end
     class Client < SqlObject
@@ -196,7 +196,7 @@ module Fixie
       ro_access :id, :org_id, :authz_id, :last_updated_by, :created_at, :updated_at, :name, :serialized_object
       # serialized_object requires work since most of the time it isn't wanted
     end
-   
+
     class Node < SqlObject
       include AuthzObjectMixin
       def initialize(data)
@@ -205,7 +205,7 @@ module Fixie
       ro_access :id, :org_id, :authz_id, :last_updated_by, :created_at, :updated_at, :name, :serialized_object
       # serialized_object requires work since most of the time it isn't wanted
     end
-    
+
     class Role < SqlObject
       include AuthzObjectMixin
       def initialize(data)
@@ -214,13 +214,13 @@ module Fixie
       ro_access :id, :org_id, :authz_id, :last_updated_by, :created_at, :updated_at, :name, :serialized_object
       # serialized_object requires work since most of the time it isn't wanted
     end
-    
+
     #
-    # 
+    #
     #
     class SqlTable
       include AuthzMapper
-      
+
       def get_table
         :unknown_table
       end
@@ -246,7 +246,7 @@ module Fixie
         elements = inner.all.map {|org| mk_element(org) }
       end
 
-      # 
+      #
       # TODO Improve these via define_method
       # See http://blog.jayfields.com/2007/10/ruby-defining-class-methods.html
       #     https://stackoverflow.com/questions/9658724/ruby-metaprogramming-class-eval/9658775#9658775
@@ -254,12 +254,12 @@ module Fixie
         name = :"by_#{arg}"
         self.class_eval("def [](arg); #{name}(arg).all(1).first; end")
 
-        listfun = <<EOLF 
-def list(max_count=10); 
+        listfun = <<EOLF
+def list(max_count=10);
   elements = all(max_count)
-  if elements == :too_many_results 
+  if elements == :too_many_results
      elements
-  else 
+  else
      elements.map {|e| e.#{arg} }.sort
   end
 end
@@ -284,23 +284,23 @@ EOLF
       def self.element(name)
         fundef = "ElementType = name; def mk_element(x); #{name}.new(x); end"
         self.class_eval(fundef)
-      end     
-    end     
+      end
+    end
 
     class Orgs < SqlTable
       table :orgs
-      element Sql::Org        
+      element Sql::Org
       register_authz :org, :object
-      
+
       primary :name
       filter_by :name, :id, :full_name, :authz_id
 
       GlobalOrg = "0"*32
-     
+
       def self.org_guid_to_name(guid)
         "global" if guid == GlobalOrg
         # Cache the class
-        @orgs ||= Orgs.new        
+        @orgs ||= Orgs.new
         names = @orgs.by_id(guid).all(1)
         if names.count == 1
           names.first.name
@@ -311,11 +311,11 @@ EOLF
     end
 
     class Associations < SqlTable
-      table :org_user_associations 
+      table :org_user_associations
       filter_by :org_id, :user_id, :last_updated_by
     end
     class Invites < SqlTable
-      table :org_user_invites 
+      table :org_user_invites
       filter_by :org_id, :user_id, :last_updated_by
     end
     class Users < SqlTable
@@ -324,13 +324,13 @@ EOLF
       register_authz :user, :actor
 
       primary :username
-      filter_by :id, :authz_id, :username, :email 
+      filter_by :id, :authz_id, :username, :email
     end
     class Clients < SqlTable
       table :clients
       element Sql::Client
       register_authz :client, :actor
-      
+
       primary :name
       filter_by :name, :id, :org_id, :authz_id, :last_updated_by
     end
@@ -339,7 +339,7 @@ EOLF
       table :containers
       element Sql::Container
       register_authz :container, :container
-      
+
       primary :name
       filter_by :name, :id, :org_id, :authz_id, :last_updated_by
     end
@@ -347,7 +347,7 @@ EOLF
       table :groups
       element Sql::Group
       register_authz :group, :group
-      
+
       primary :name
       filter_by :name, :id, :org_id, :authz_id, :last_updated_by
     end
@@ -357,7 +357,7 @@ EOLF
       table :cookbooks
       element Sql::Cookbook
       register_authz :cookbook, :object
-      
+
       primary :name
       filter_by :name, :id, :org_id, :authz_id
     end
@@ -366,7 +366,7 @@ EOLF
       table :data_bags
       element Sql::DataBag
       register_authz :data_bag, :object
-      
+
       primary :name
       filter_by :name, :id, :org_id, :authz_id, :last_updated_by
     end
@@ -375,7 +375,7 @@ EOLF
       table :environments
       element Sql::Environment
       register_authz :environment, :object
-      
+
       primary :name
       filter_by :name, :id, :org_id, :authz_id, :last_updated_by
     end
@@ -384,7 +384,7 @@ EOLF
       table :nodes
       element Sql::Node
       register_authz :node, :object
-      
+
       primary :name
       filter_by :name, :id, :org_id, :authz_id, :last_updated_by
     end
@@ -393,12 +393,12 @@ EOLF
       table :roles
       element Sql::Role
       register_authz :role, :object
-      
+
       primary :name
       filter_by :name, :id, :org_id, :authz_id, :last_updated_by
     end
-    
 
-    
+
+
   end
 end
