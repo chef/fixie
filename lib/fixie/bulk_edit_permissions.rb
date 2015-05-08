@@ -39,6 +39,33 @@ module Fixie
       invites ||= Fixie::Sql::Invites.new
     end
 
+    def self.check_permissions(org)
+      org = orgs[org] if org.is_a?(String)
+      admins = org.groups['admins'].authz_id
+      pivotal = users['pivotal'].authz_id
+      errors = Hash.new({})
+      org.each_authz_object do |object|
+        acl = object.acl_raw
+        broken_acl = {}
+        # the one special case
+        acl.each do |k,v|
+          list = []
+          list << "pivotal" if !v['actors'].member?(pivotal)
+          # admins doesn't belong to the billing admins group
+          if object.class != Fixie::Sql::Group || object.name != 'billing-admins'
+            list << "admins" if !v['groups'].member?(admins)
+          end
+          broken_acl[k] = list if !list.empty?
+        end
+        if !broken_acl.empty?
+          classname = object.class
+          errors[classname] = {} if !errors.has_key?(classname)
+          errors[classname][object.name] = broken_acl
+        end
+      end
+      return errors
+    end
+
     def self.ace_add(list, ace_type, entity)
       list.each do |item|
         if item.respond_to?(:ace_add)
@@ -103,33 +130,22 @@ module Fixie
           object.ace_add(:all, admins)
         end
       end
-    end    
+    end
 
-    def self.check_permissions(org)
+    def self.copy_from_containers(org)
       org = orgs[org] if org.is_a?(String)
-      admins = org.groups['admins'].authz_id
-      pivotal = users['pivotal'].authz_id
-      errors = Hash.new({})
-      org.each_authz_object do |object|
-        acl = object.acl_raw
-        broken_acl = {}
-        # the one special case
-        acl.each do |k,v|
-          list = []
-          list << "pivotal" if !v['actors'].member?(pivotal)
-          # admins doesn't belong to the billing admins group
-          if object.class != Fixie::Sql::Group || object.name != 'billing-admins'
-            list << "admins" if !v['groups'].member?(admins)
-          end
-          broken_acl[k] = list if !list.empty?
-        end
-        if !broken_acl.empty?
-          classname = object.class
-          errors[classname] = {} if !errors.has_key?(classname)
-          errors[classname][object.name] = broken_acl
+
+      containers = org.containers.all(:all)
+      containers.each do |c|
+        # don't mess with containers and groups, they are special
+        next if c.name == "containers" || c.name == "groups"
+        org.objects_by_container_type(c.name).each do |obj|
+          obj.acl_add_from_object(c)
+          pp obj.name
         end
       end
-      return errors
+      return
     end
+
   end
 end

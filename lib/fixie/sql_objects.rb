@@ -129,16 +129,19 @@ module Fixie
       # works, since it depends on a lot of name magic...
 
       NAME_FIXUP = {"data" => "data_bags", "sandboxes" => nil}
+      def objects_by_container_type(container)
+        name = NAME_FIXUP.has_key?(container) ? NAME_FIXUP[container] : container
+        return [] if name.nil?
+
+        object_type = name.to_sym
+        #        raise Exception "No such object_type #{object_type}" unless respond_to?(object_type)
+        send(object_type).all(:all)
+      end
+
       def each_authz_object_by_class
         containers = self.containers.all(:all)
         containers.each do |container|
-          name = container.name
-          name = NAME_FIXUP[name] if NAME_FIXUP.has_key?(name)
-          next if name.nil?
-
-          object_type = name.to_sym
-          #        raise Exception "No such object_type #{object_type}" unless respond_to?(object_type)
-          objects = send(object_type).all(:all)
+          objects = objects_by_container_type(container.name)
           if block_given?
             yield objects
           end
