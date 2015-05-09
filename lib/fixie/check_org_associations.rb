@@ -1,3 +1,4 @@
+# -*- indent-tabs-mode: nil; fill-column: 110 -*-
 #
 # Copyright (c) 2015 Chef Software Inc.
 # License :: Apache License, Version 2.0
@@ -22,6 +23,8 @@ require 'fixie/config.rb'
 require 'fixie/authz_objects.rb'
 require 'fixie/authz_mapper.rb'
 
+require 'fixie/utility_helpers.rb'
+
 require 'pp'
 
 module Fixie
@@ -39,10 +42,29 @@ module Fixie
       invites ||= Fixie::Sql::Invites.new
     end
 
+    def self.make_user(user)
+      if user.is_a?(String)
+        return users[user]
+      elsif user.is_a?(Fixie::Sql::User)
+        return user
+      else
+        raise Exception "Expected a user, got a #{user.class}"
+      end
+    end
+    def self.make_org(org)
+      if org.is_a?(String)
+        return orgs[org]
+      elsif org.is_a?(Fixie::Sql::Org)
+        return org
+      else
+        raise Exception "Expected an org, got a #{org.class}"
+      end
+    end
+
     def self.check_association(org, user, global_admins = nil)
       # magic to make usage easier
-      org = orgs[org] if org.is_a?(String)
-      user = users[user] if user.is_a?(String)
+      org = make_org(org)
+      user = make_user(user)
       global_admins ||= org.global_admins
 
       # check that the user is associated
@@ -100,10 +122,10 @@ module Fixie
       return true
     end
 
-    def self.check_associations(orgname)
+    def self.check_associations(org)
       success = true
-
-      org = orgs[orgname]
+      org = make_org(org)
+      orgname = org.name
 
       # check that global_admins exists:
       global_admins = org.global_admins
