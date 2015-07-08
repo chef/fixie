@@ -43,11 +43,11 @@ module Fixie
 
       # The class for the table, e.g. Orgs
       def self.table_class(name)
-        (base + name.to_s.pluralize.capitalize).constantize
+        (base + name.to_s.pluralize.camelcase).constantize
       end
       # The class for one instance of the object, e.g. Org
       def self.object_class(name)
-        (base + name.to_s.singularize.capitalize).constantize
+        (base + name.to_s.singularize.camelcase).constantize
       end
       def self.singular(name)
         name.to_s.singularize
@@ -116,7 +116,7 @@ module Fixie
         data[:id]
       end
 
-      scoped_type :container, :group, :clients, :cookbook, :databag, :environment, :node, :role
+      scoped_type :container, :group, :clients, :cookbook, :data_bag, :environment, :node, :role
       def global_admins
         name = self.name
         global_admins_name = "#{name}_global_admins"
