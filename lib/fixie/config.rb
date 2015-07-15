@@ -20,7 +20,7 @@
 
 require 'singleton'
 require 'yajl'
-
+require 'pathname'
 
 module Fixie
   def self.configure
