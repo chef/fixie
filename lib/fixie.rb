@@ -20,4 +20,7 @@ require 'fixie/config.rb'
 require 'fixie/sql'
 require 'fixie/sql_objects'
 
+# This doesn't work because of initialization order, figure it out.
+require 'fixie/check_org_associations'
+
 Sequel.extension :inflector

@@ -117,6 +117,12 @@ module Fixie
       end
 
       scoped_type :container, :group, :clients, :cookbook, :databag, :environment, :node, :role
+      def global_admins
+        name = self.name
+        global_admins_name = "#{name}_global_admins"
+        Fixie::Sql::Groups.new["#{name}_global_admins"]
+      end
+
 
       # Maybe autogenerate this from data.columns?
       ro_access :id, :authz_id, :assigned_at, :last_updated_by, :created_at, :updated_at, :name, :full_name
@@ -313,10 +319,21 @@ EOLF
     class Associations < SqlTable
       table :org_user_associations
       filter_by :org_id, :user_id, :last_updated_by
+
+      def by_org_id_user_id(org_id, user_id)
+        # db table constraint guarantees that this is unique
+        inner.filter(:org_id=>org_id, :user_id=>user_id).all.first
+      end
+
     end
     class Invites < SqlTable
       table :org_user_invites
       filter_by :org_id, :user_id, :last_updated_by
+
+      def by_org_id_user_id(org_id, user_id)
+        # db table constraint guarantees that this is unique
+        inner.filter(:org_id=>org_id, :user_id=>user_id).all.first
+      end
     end
     class Users < SqlTable
       table :users
