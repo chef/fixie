@@ -154,7 +154,7 @@ module Fixie
 
       # Check that we don't have zombie USAGs left around (not 100% reliable)
       # because someone could create a group that looks like a USAG
-      possible_usags = org.groups.list - user_ids
+      possible_usags = org.groups.list(:all) - user_ids
       usags = possible_usags.select {|n| n =~ /^\h+{20}$/ }
       if !usags.empty?
         puts "#{orgname} Suspicious USAGS without associated user #{usags.join(', ') }"
