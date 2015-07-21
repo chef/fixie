@@ -48,7 +48,7 @@ module Fixie
       elsif user.is_a?(Fixie::Sql::User)
         return user
       else
-        raise Exception "Expected a user, got a #{user.class}"
+        raise "Expected a user, got a #{user.class}"
       end
     end
     def self.make_org(org)
@@ -57,7 +57,7 @@ module Fixie
       elsif org.is_a?(Fixie::Sql::Org)
         return org
       else
-        raise Exception "Expected an org, got a #{org.class}"
+        raise "Expected an org, got a #{org.class}"
       end
     end
 
