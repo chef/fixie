@@ -227,6 +227,10 @@ module Fixie
     class SqlTable
       include AuthzMapper
 
+      def self.max_count_default
+        50
+      end
+      
       def get_table
         :unknown_table
       end
@@ -247,8 +251,13 @@ module Fixie
         self.class.new(inner.filter(field=>exp))
       end
 
-      def all(max_count=10)
-        return :too_many_results if (inner.count > max_count)
+      def all(max_count=:default)
+        if max_count == :default
+          max_count = Fixie::Sql::SqlTable.max_count_default
+        end
+        if max_count != :all
+          return :too_many_results if (inner.count > max_count)
+        end
         elements = inner.all.map {|org| mk_element(org) }
       end
 
@@ -261,7 +270,7 @@ module Fixie
         self.class_eval("def [](arg); #{name}(arg).all(1).first; end")
 
         listfun = <<EOLF
-def list(max_count=10);
+def list(max_count=:default)
   elements = all(max_count)
   if elements == :too_many_results
      elements
