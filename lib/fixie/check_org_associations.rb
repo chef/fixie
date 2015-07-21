@@ -48,7 +48,7 @@ module Fixie
       elsif user.is_a?(Fixie::Sql::User)
         return user
       else
-        raise Exception "Expected a user, got a #{user.class}"
+        raise "Expected a user, got a #{user.class}"
       end
     end
     def self.make_org(org)
@@ -57,7 +57,7 @@ module Fixie
       elsif org.is_a?(Fixie::Sql::Org)
         return org
       else
-        raise Exception "Expected an org, got a #{org.class}"
+        raise "Expected an org, got a #{org.class}"
       end
     end
 
@@ -154,7 +154,7 @@ module Fixie
 
       # Check that we don't have zombie USAGs left around (not 100% reliable)
       # because someone could create a group that looks like a USAG
-      possible_usags = org.groups.list - user_ids
+      possible_usags = org.groups.list(100000) - user_ids
       usags = possible_usags.select {|n| n =~ /^\h+{20}$/ }
       if !usags.empty?
         puts "#{orgname} Suspicious USAGS without associated user #{usags.join(', ') }"
