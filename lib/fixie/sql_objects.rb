@@ -123,7 +123,7 @@ module Fixie
       end
 
       scoped_type :container, :group, :client,
-                  :cookbook_artifact, :cookbook, :databag, :environment, :node, :policy, :policy_group , :role
+                  :cookbook_artifact, :cookbook, :data_bag, :environment, :node, :policy, :policy_group , :role
 
       # Maybe autogenerate this from data.columns?
       ro_access :id, :authz_id, :assigned_at, :last_updated_by, :created_at, :updated_at, :name, :full_name
