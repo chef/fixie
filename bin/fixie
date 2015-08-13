@@ -1,10 +1,5 @@
 #!/usr/bin/env ruby
 
-require "rubygems"
-require "bundler/setup"
-
-$:.unshift(File.dirname(__FILE__) + '/../lib/')
-
 require 'fixie/console'
 
 Fixie::Console.start
