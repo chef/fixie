@@ -17,7 +17,6 @@
 # Author: Mark Anderson <mark@chef.io>
 #
 require 'yajl'
-require 'uuidtools'
 require 'rest-client'
 
 require 'fixie/config.rb'

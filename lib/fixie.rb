@@ -16,6 +16,7 @@
 #
 # Author: Mark Anderson <mark@chef.io>
 
+require 'sequel'
 require 'fixie/config.rb'
 require 'fixie/sql'
 require 'fixie/sql_objects'

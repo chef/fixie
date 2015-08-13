@@ -16,8 +16,6 @@
 #
 # Author: Mark Anderson <mark@chef.io>
 #
-require 'yajl'
-require 'uuidtools'
 require 'sequel'
 
 require 'fixie/config.rb'
