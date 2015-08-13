@@ -16,8 +16,8 @@
 #
 # Author: Mark Anderson <mark@chef.io>
 #
-require 'rest-client'
 require 'ffi_yajl'
+require 'chef/http'
 
 require 'fixie/config.rb'
 
@@ -27,6 +27,7 @@ module Fixie
     def initialize(user=nil)
       @requestor_authz = user ? user : Fixie.configure { |x| x.superuser_id }
       @auth_uri ||= Fixie.configure { |x| x.authz_uri }
+      @rest = Chef::HTTP.new(@auth_uri)
     end
 
     def json_helper(s)
@@ -38,23 +39,31 @@ module Fixie
     end
 
     def get(resource)
-      result = RestClient.get("#{@auth_uri}/#{resource}", :content_type=>:json, :accept=>:json,
-                              'X-Ops-Requesting-Actor-Id'=>@requestor_authz)
+      result = @rest.get(resource,
+                         'Content-Type'=>'application/json',
+                         'Accept'=>'application/json',
+                         'X-Ops-Requesting-Actor-Id'=>@requestor_authz)
       FFI_Yajl::Parser.parse(result)
     end
     def put(resource, data)
-      result = RestClient.put("#{@auth_uri}/#{resource}", self.json_helper(data), :content_type=>:json, :accept=>:json,
-                              'X-Ops-Requesting-Actor-Id'=>@requestor_authz)
+      result = @rest.put(resource, self.json_helper(data),
+                         'Content-Type'=>'application/json',
+                         'Accept'=>'application/json',
+                         'X-Ops-Requesting-Actor-Id'=>@requestor_authz)
       FFI_Yajl::Parser.parse(result)
     end
     def post(resource, data)
-      result = RestClient.post("#{@auth_uri}/#{resource}", self.json_helper(data), :content_type=>:json, :accept=>:json,
-                               'X-Ops-Requesting-Actor-Id'=>@requestor_authz)
+      result = @rest.post(resource, self.json_helper(data),
+                          'Content-Type'=>'application/json',
+                          'Accept'=>'application/json',
+                          'X-Ops-Requesting-Actor-Id'=>@requestor_authz)
       FFI_Yajl::Parser.parse(result)
     end
     def delete(resource)
-      result = RestClient.delete("#{@auth_uri}/#{resource}", :content_type=>:json, :accept=>:json,
-                                 'X-Ops-Requesting-Actor-Id'=>@requestor_authz)
+      result = @rest.delete(resource,
+                            'Content-Type'=>'application/json',
+                            'Accept'=>'application/json',
+                            'X-Ops-Requesting-Actor-Id'=>@requestor_authz)
       FFI_Yajl::Parser.parse(result)
     end
 
