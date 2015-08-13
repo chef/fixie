@@ -45,7 +45,13 @@ module ChefFixie
       pivotal = users['pivotal'].authz_id
       errors = Hash.new({})
       org.each_authz_object do |object|
-        acl = object.acl_raw
+        begin 
+          acl = object.acl_raw
+        rescue RestClient::ResourceNotFound=>e
+          puts "#{object.class} '#{object.name}' id '#{object.id}' missing authz info"
+          # pp :object=>object, :e=>e
+          next
+        end
         broken_acl = {}
         # the one special case
         acl.each do |k,v|
