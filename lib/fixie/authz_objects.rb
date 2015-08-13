@@ -16,8 +16,8 @@
 #
 # Author: Mark Anderson <mark@chef.io>
 #
-require 'yajl'
 require 'rest-client'
+require 'ffi_yajl'
 
 require 'fixie/config.rb'
 
@@ -31,7 +31,7 @@ module Fixie
 
     def json_helper(s)
       if s.kind_of?(Hash)
-        Yajl::Encoder.encode(s)
+        FFI_Yajl::Encoder.encode(s)
       else
         s
       end
@@ -40,22 +40,22 @@ module Fixie
     def get(resource)
       result = RestClient.get("#{@auth_uri}/#{resource}", :content_type=>:json, :accept=>:json,
                               'X-Ops-Requesting-Actor-Id'=>@requestor_authz)
-      Yajl::Parser.parse(result)
+      FFI_Yajl::Parser.parse(result)
     end
     def put(resource, data)
       result = RestClient.put("#{@auth_uri}/#{resource}", self.json_helper(data), :content_type=>:json, :accept=>:json,
                               'X-Ops-Requesting-Actor-Id'=>@requestor_authz)
-      Yajl::Parser.parse(result)
+      FFI_Yajl::Parser.parse(result)
     end
     def post(resource, data)
       result = RestClient.post("#{@auth_uri}/#{resource}", self.json_helper(data), :content_type=>:json, :accept=>:json,
                                'X-Ops-Requesting-Actor-Id'=>@requestor_authz)
-      Yajl::Parser.parse(result)
+      FFI_Yajl::Parser.parse(result)
     end
     def delete(resource)
       result = RestClient.delete("#{@auth_uri}/#{resource}", :content_type=>:json, :accept=>:json,
                                  'X-Ops-Requesting-Actor-Id'=>@requestor_authz)
-      Yajl::Parser.parse(result)
+      FFI_Yajl::Parser.parse(result)
     end
 
   end

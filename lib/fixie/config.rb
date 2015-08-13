@@ -19,7 +19,7 @@
 # Much of this code was orginally derived from the orgmapper tool, which had many varied authors.
 
 require 'singleton'
-require 'yajl'
+require 'ffi_yajl'
 require 'pathname'
 
 module Fixie
@@ -101,7 +101,7 @@ module Fixie
     end
 
     def load_json_from_path(pathlist, filelist)
-      parser = Yajl::Parser.new
+      parser = FFI_Yajl::Parser.new
       pathlist.each do |path|
         filelist.each do |file|
           configfile = path + file
