@@ -75,8 +75,7 @@ module Fixie
       end
       # TODO figure out model for write access
 
-      # for objects whose name isn't the same as the field.
-      def self.name(field)
+      def self.name_field(field)
         fundef = "def name; @data.#{field}; end"
         self.class_eval(fundef)
       end
@@ -164,7 +163,7 @@ module Fixie
       def initialize(data)
         super(data)
       end
-      name :username
+      name_field :username
       ro_access :id, :authz_id, :last_updated_by, :created_at, :updated_at, :username, :email, :public_key, :pubkey_version, :serialized_object, :external_authentication_uid, :recovery_authentication_enabled, :admin, :hashed_password, :salt, :hash_type
     end
     class Client < SqlObject
