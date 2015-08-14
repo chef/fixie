@@ -17,6 +17,7 @@
 # Author: Mark Anderson <mark@chef.io>
 #
 
+require 'pp'
 require 'fixie/config.rb'
 require 'fixie/authz_objects.rb'
 

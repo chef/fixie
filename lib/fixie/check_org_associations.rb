@@ -24,8 +24,6 @@ require 'fixie/authz_mapper.rb'
 
 require 'fixie/utility_helpers.rb'
 
-require 'pp'
-
 module Fixie
   module CheckOrgAssociations
     def self.orgs

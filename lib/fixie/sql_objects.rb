@@ -16,13 +16,13 @@
 #
 # Author: Mark Anderson <mark@chef.io>
 #
+
+require 'pp'
 require 'sequel'
 
 require 'fixie/config.rb'
 require 'fixie/authz_objects.rb'
 require 'fixie/authz_mapper.rb'
-
-require 'pp'
 
 Sequel.extension :inflector
 

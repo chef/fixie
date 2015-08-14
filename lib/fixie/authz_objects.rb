@@ -16,6 +16,8 @@
 #
 # Author: Mark Anderson <mark@chef.io>
 #
+
+require 'pp'
 require 'ffi_yajl'
 require 'chef/http'
 
