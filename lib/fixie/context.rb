@@ -42,27 +42,6 @@ module Fixie
       Fixie::GlobalGroups.new
     end
 
-    def help
-      puts(<<-HALP)
-** ORGS **
-* access with ORGS or ORGS
-* access a specific org: ORGS['orgname']
-
-** USERS **
-* users.find('clownco-org-admin')
-* users.grep :clownco
-* users.usernames
-
-** RAW SQL ACCESS**
-* sql[:users].select(:column, :column).where(:column => "condition").all
-
-** irb Help **
-irb_help
-
-HALP
-      :COOL_STORY_BRO
-    end
-
     def sql
       Fixie::Sql.default_connection
     end
