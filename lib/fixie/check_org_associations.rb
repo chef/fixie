@@ -134,8 +134,8 @@ module Fixie
         success = false
       end
 
-      users_assoc = assocs.by_org_id(org.id).all(100000)
-      users_invite = invites.by_org_id(org.id).all(100000)
+      users_assoc = assocs.by_org_id(org.id).all(:all)
+      users_invite = invites.by_org_id(org.id).all(:all)
 
       user_ids = users_assoc.map {|a| a.user_id }
       users_in_org = user_ids.map {|i| users.by_id(i).all.first }
