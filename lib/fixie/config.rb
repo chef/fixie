@@ -29,7 +29,7 @@ module Fixie
 
   ##
   # = Fixie::Config
-  # configuration for the orgmapper command.
+  # configuration for the fixie command.
   #
   # ==Example Config File:
   #
