@@ -22,7 +22,6 @@ require 'optparse'
 require 'pp'
 require 'pry'
 
-require 'fixie/config'
 require 'fixie'
 require 'fixie/context'
 

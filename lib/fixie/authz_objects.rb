@@ -21,7 +21,7 @@ require 'pp'
 require 'ffi_yajl'
 require 'chef/http'
 
-require 'fixie/config.rb'
+require 'fixie/config'
 
 module Fixie
 
