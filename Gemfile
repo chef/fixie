@@ -1,6 +1,6 @@
 source "http://rubygems.org"
 
-gem "aws-s3", :git => "git@github.com:opscode/aws-s3.git", :require => "aws/s3"
+#gem "aws-s3", :git => "git@github.com:opscode/aws-s3.git", :require => "aws/s3"
 
 # This is commented out because if we ever need to restore this we'll need to restore both properly to the same values to keep things working right.
 #gem "couchrest", :git => "git://github.com/opscode/couchrest.git"
