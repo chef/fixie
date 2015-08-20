@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'fixie/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "fixie"
+  spec.name          = "chef_fixie"
   spec.version       = Fixie::VERSION
   spec.authors       = ["Mark Anderson"]
   spec.email         = ["mark@chef.io"]
