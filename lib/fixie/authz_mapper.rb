@@ -16,11 +16,10 @@
 #
 # Author: Mark Anderson <mark@chef.io>
 #
-require 'yajl'
-require 'sequel'
 
-require 'fixie/config.rb'
-require 'fixie/authz_objects.rb'
+require 'pp'
+require 'fixie/config'
+require 'fixie/authz_objects'
 
 module Fixie
   module AuthzMapper

@@ -19,7 +19,7 @@
 # Much of this code was orginally derived from the orgmapper tool, which had many varied authors.
 
 require 'singleton'
-require 'yajl'
+require 'ffi_yajl'
 require 'pathname'
 
 module Fixie
@@ -27,9 +27,32 @@ module Fixie
     yield Config.instance
   end
 
+  def self.load_config(config_file = nil)
+    if config_file
+      puts "loading config: #{config_file}..."
+      Kernel.load(config_file)
+    else
+      path = "/etc/opscode"
+      puts "loading config from #{path}"
+      Fixie::Config.instance.load_from_pc(path)
+    end
+  end
+
+  def self.setup
+    # TODO: do we have to polute global object with this to make it available to the irb instance?
+    Object.const_set(:ORGS, Fixie::Sql::Orgs.new)
+    Object.const_set(:USERS, Fixie::Sql::Users.new)
+    Object.const_set(:ASSOCS, Fixie::Sql::Associations.new)
+    Object.const_set(:INVITES, Fixie::Sql::Invites.new)
+
+    # scope this by the global org id?
+    Object.const_set(:GLOBAL_GROUPS, Fixie::Sql::Groups.new.by_org_id(Fixie::Sql::Orgs::GlobalOrg))
+    Object.const_set(:GLOBAL_CONTAINERS, Fixie::Sql::Containers.new.by_org_id(Fixie::Sql::Orgs::GlobalOrg))
+  end
+
   ##
   # = Fixie::Config
-  # configuration for the orgmapper command.
+  # configuration for the fixie command.
   #
   # ==Example Config File:
   #
@@ -101,7 +124,7 @@ module Fixie
     end
 
     def load_json_from_path(pathlist, filelist)
-      parser = Yajl::Parser.new
+      parser = FFI_Yajl::Parser.new
       pathlist.each do |path|
         filelist.each do |file|
           configfile = path + file

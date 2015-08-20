@@ -1,37 +1,5 @@
 #!/usr/bin/env ruby
 
-require "rubygems"
-require "bundler/setup"
-
-$:.unshift(File.dirname(__FILE__) + '/../lib/')
-
-require 'optparse'
-require 'irb'
-require 'irb/init'
-require 'irb/completion'
-require 'irb/ext/history'
-require 'pp'
-require 'pry'
-
-require 'fixie/config'
-require 'fixie'
-require 'fixie/context'
 require 'fixie/console'
 
-# IRB tries to overwrite our custom settings when it loads, so we have to hax0r
-# it to work.
-module IRB
-  class << self
-    alias :run_original_config :run_config
-
-    def run_config
-      run_original_config
-      ::Fixie::Console.configure_irb
-    end
-  end
-end
-
-
-
 Fixie::Console.start
-

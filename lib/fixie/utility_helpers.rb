@@ -17,13 +17,10 @@
 #
 # Author: Mark Anderson <mark@chef.io>
 #
-require 'sequel'
 
-require 'fixie/config.rb'
-require 'fixie/authz_objects.rb'
-require 'fixie/authz_mapper.rb'
-
-require 'pp'
+require 'fixie/config'
+require 'fixie/authz_objects'
+require 'fixie/authz_mapper'
 
 module Fixie
   module UtilityHelpers

@@ -17,15 +17,12 @@
 #
 # Author: Mark Anderson <mark@chef.io>
 #
-require 'sequel'
 
-require 'fixie/config.rb'
-require 'fixie/authz_objects.rb'
-require 'fixie/authz_mapper.rb'
+require 'fixie/config'
+require 'fixie/authz_objects'
+require 'fixie/authz_mapper'
 
-require 'fixie/utility_helpers.rb'
-
-require 'pp'
+require 'fixie/utility_helpers'
 
 module Fixie
   module CheckOrgAssociations
