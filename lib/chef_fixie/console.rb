@@ -22,10 +22,10 @@ require 'optparse'
 require 'pp'
 require 'pry'
 
-require 'fixie'
-require 'fixie/context'
+require 'chef_fixie'
+require 'chef_fixie/context'
 
-module Fixie
+module ChefFixie
   module Console
     extend self
 
@@ -51,7 +51,7 @@ module Fixie
         opt.on_tail('-h', '--help', 'Show this message') do
           puts opt
           puts "\nExample configuration file:\n\n"
-          puts Fixie::Config.instance.example_config
+          puts ChefFixie::Config.instance.example_config
           puts "\n"
           exit(1)
         end
@@ -59,8 +59,8 @@ module Fixie
       end
       pp :cli_opts => options if ENV["DEBUG"]
 
-      Fixie::Config.instance.merge_opts(options)
-      puts Fixie::Config.instance.to_text
+      ChefFixie::Config.instance.merge_opts(options)
+      puts ChefFixie::Config.instance.to_text
     end
 
     def configure_pry

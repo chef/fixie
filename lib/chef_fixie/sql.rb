@@ -20,11 +20,11 @@ require 'ffi_yajl'
 require 'uuidtools'
 require 'sequel'
 
-require 'fixie/config'
+require 'chef_fixie/config'
 
 Sequel.default_timezone = :utc
 
-module Fixie
+module ChefFixie
   module Sql
     
     class InvalidConfig < StandardError
@@ -46,7 +46,7 @@ module Fixie
 
     # Returns the connection string or raises an error if you didn't set one.
     def self.connection_string
-      @connection_string ||= Fixie.configure {|x| x.sql_database }
+      @connection_string ||= ChefFixie.configure {|x| x.sql_database }
     end
     
     # Returns a Sequel::Data baseobject, which wraps access to the database.

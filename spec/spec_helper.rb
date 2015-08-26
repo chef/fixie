@@ -4,7 +4,7 @@
 # loaded once.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
-require 'fixie/config'
+require 'chef_fixie/config'
 
 def load_from_config_example
   # load from config file
@@ -13,7 +13,7 @@ def load_from_config_example
 end
 
 def load_from_opscode
-  Fixie::Config::instance.load_from_pc
+  ChefFixie::Config::instance.load_from_pc
 end
 
 RSpec.configure do |config|
@@ -29,13 +29,13 @@ RSpec.configure do |config|
   # configure specs
 
   load_from_opscode
-  Fixie::Config.instance.merge_opts({})
-  puts Fixie::Config.instance.to_text
+  ChefFixie::Config.instance.merge_opts({})
+  puts ChefFixie::Config.instance.to_text
 
   # Horrible shameful hack TODO FIXME
   # We can't include a lot of the SQL code until we configure things, because
   # we inherit from Model e.g.
   # class Users < Sequel::Model(:users) 
-  require 'fixie'
+  require 'chef_fixie'
 end
 

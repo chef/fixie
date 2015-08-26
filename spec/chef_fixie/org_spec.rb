@@ -1,12 +1,12 @@
 
 require 'rspec'
 require "spec_helper"
-require 'fixie'
-require 'fixie/config'
+require 'chef_fixie'
+require 'chef_fixie/config'
 
-RSpec.describe Fixie::Sql::Orgs, "Organizations access" do
+RSpec.describe ChefFixie::Sql::Orgs, "Organizations access" do
   let (:test_org_name) { "ponyville" }
-  let (:orgs) { Fixie::Sql::Orgs.new }
+  let (:orgs) { ChefFixie::Sql::Orgs.new }
   let (:test_org) { orgs[test_org_name]}
 
   context "Basic functionality of org accessor" do

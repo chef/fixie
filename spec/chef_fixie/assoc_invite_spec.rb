@@ -1,16 +1,16 @@
 
 require 'rspec'
 require "spec_helper"
-require 'fixie'
-require 'fixie/config'
+require 'chef_fixie'
+require 'chef_fixie/config'
 
-RSpec.describe Fixie::Sql::Associations, "Associations tests" do
+RSpec.describe ChefFixie::Sql::Associations, "Associations tests" do
   let (:test_org_name) { "ponyville" }
-  let (:orgs) { Fixie::Sql::Orgs.new }
+  let (:orgs) { ChefFixie::Sql::Orgs.new }
   let (:test_org) { orgs[test_org_name]}
 
-  let (:users) { Fixie::Sql::Users.new }
-  let (:assocs) { Fixie::Sql::Associations.new }
+  let (:users) { ChefFixie::Sql::Users.new }
+  let (:assocs) { ChefFixie::Sql::Associations.new }
 
 
   context "Basic functionality of association spec" do

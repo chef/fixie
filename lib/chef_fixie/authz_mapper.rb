@@ -18,10 +18,10 @@
 #
 
 require 'pp'
-require 'fixie/config'
-require 'fixie/authz_objects'
+require 'chef_fixie/config'
+require 'chef_fixie/authz_objects'
 
-module Fixie
+module ChefFixie
   module AuthzMapper
 
     #
@@ -46,7 +46,7 @@ module Fixie
         name = object.name
         scope = 
           if object.respond_to?(:org_id) 
-              Fixie::Sql::Orgs.org_guid_to_name(object.org_id)
+              ChefFixie::Sql::Orgs.org_guid_to_name(object.org_id)
           else
             :global
           end

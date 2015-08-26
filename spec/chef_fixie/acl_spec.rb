@@ -1,13 +1,13 @@
 
 require 'rspec'
 require "spec_helper"
-require 'fixie'
-require 'fixie/config'
+require 'chef_fixie'
+require 'chef_fixie/config'
 
-RSpec.describe Fixie::Sql::Orgs, "ACL access" do
+RSpec.describe ChefFixie::Sql::Orgs, "ACL access" do
   let (:test_org_name) { "ponyville"}
-  let (:orgs) { Fixie::Sql::Orgs.new }
-  let (:users) { Fixie::Sql::Users.new }
+  let (:orgs) { ChefFixie::Sql::Orgs.new }
+  let (:users) { ChefFixie::Sql::Users.new }
   let (:test_org) { orgs[test_org_name] }
 
   # TODO this should use a freshly created object and purge it afterwords.

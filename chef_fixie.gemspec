@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'fixie/version'
+require 'chef_fixie/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "chef_fixie"
-  spec.version       = Fixie::VERSION
+  spec.version       = ChefFixie::VERSION
   spec.authors       = ["Mark Anderson"]
   spec.email         = ["mark@chef.io"]
   spec.description   = %q{Low level manipulation tool for Chef Server 12 and later}
@@ -15,7 +15,7 @@ Gem::Specification.new do |spec|
 
   spec.files         = %w(LICENSE README.md fixie.conf.example) + Dir.glob("{bin,doc,lib,spec}/**/*")
   spec.bindir        = 'bin'
-  spec.executables   = 'fixie'
+  spec.executables   = 'chef_fixie'
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 

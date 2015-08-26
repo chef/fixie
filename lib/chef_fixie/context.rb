@@ -19,7 +19,7 @@
 # Much of this code was orginally derived from the orgmapper tool, which had many varied authors.
 
 
-module Fixie
+module ChefFixie
     module Context
 
     def describe_orgs
@@ -27,23 +27,23 @@ module Fixie
     end
 
     def orgs
-      Fixie::Organizations.new
+      ChefFixie::Organizations.new
     end
 
     def jobs
-      Fixie::Jobs.new
+      ChefFixie::Jobs.new
     end
 
     def users
-      Fixie::Users.new
+      ChefFixie::Users.new
     end
 
     def global_groups
-      Fixie::GlobalGroups.new
+      ChefFixie::GlobalGroups.new
     end
 
     def sql
-      Fixie::Sql.default_connection
+      ChefFixie::Sql.default_connection
     end
 
     def associate_user(username, orgname)
@@ -54,7 +54,7 @@ module Fixie
         raise ArgumentError, "No orgs matched '#{orgname}'"
       end
 
-      Fixie::Associator.associate_user(org, user)
+      ChefFixie::Associator.associate_user(org, user)
     end
 
     def dissociate_user(username, orgname)
@@ -65,7 +65,7 @@ module Fixie
         raise ArgumentError, "No orgs matched '#{orgname}'"
       end
 
-      Fixie::Dissociator.dissociate_user(org, user)
+      ChefFixie::Dissociator.dissociate_user(org, user)
     end
 
   end
