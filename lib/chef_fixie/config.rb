@@ -22,7 +22,7 @@ require 'singleton'
 require 'ffi_yajl'
 require 'pathname'
 
-module Fixie
+module ChefFixie
   def self.configure
     yield Config.instance
   end
@@ -34,24 +34,24 @@ module Fixie
     else
       path = "/etc/opscode"
       puts "loading config from #{path}"
-      Fixie::Config.instance.load_from_pc(path)
+      ChefFixie::Config.instance.load_from_pc(path)
     end
   end
 
   def self.setup
     # TODO: do we have to polute global object with this to make it available to the irb instance?
-    Object.const_set(:ORGS, Fixie::Sql::Orgs.new)
-    Object.const_set(:USERS, Fixie::Sql::Users.new)
-    Object.const_set(:ASSOCS, Fixie::Sql::Associations.new)
-    Object.const_set(:INVITES, Fixie::Sql::Invites.new)
+    Object.const_set(:ORGS, ChefFixie::Sql::Orgs.new)
+    Object.const_set(:USERS, ChefFixie::Sql::Users.new)
+    Object.const_set(:ASSOCS, ChefFixie::Sql::Associations.new)
+    Object.const_set(:INVITES, ChefFixie::Sql::Invites.new)
 
     # scope this by the global org id?
-    Object.const_set(:GLOBAL_GROUPS, Fixie::Sql::Groups.new.by_org_id(Fixie::Sql::Orgs::GlobalOrg))
-    Object.const_set(:GLOBAL_CONTAINERS, Fixie::Sql::Containers.new.by_org_id(Fixie::Sql::Orgs::GlobalOrg))
+    Object.const_set(:GLOBAL_GROUPS, ChefFixie::Sql::Groups.new.by_org_id(ChefFixie::Sql::Orgs::GlobalOrg))
+    Object.const_set(:GLOBAL_CONTAINERS, ChefFixie::Sql::Containers.new.by_org_id(ChefFixie::Sql::Orgs::GlobalOrg))
   end
 
   ##
-  # = Fixie::Config
+  # = ChefFixie::Config
   # configuration for the fixie command.
   #
   # ==Example Config File:
@@ -77,7 +77,7 @@ module Fixie
     end
 
     def to_text
-      txt = ["### Fixie::Config"]
+      txt = ["### ChefFixie::Config"]
       max_key_len = KEYS.inject(0) do |max, k|
         key_len = k.to_s.length
         key_len > max ? key_len : max

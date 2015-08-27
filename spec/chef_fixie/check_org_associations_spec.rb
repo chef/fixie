@@ -1,15 +1,15 @@
 # -*- indent-tabs-mode: nil; fill-column: 110 -*-
 require 'rspec'
 require "spec_helper"
-require 'fixie'
-require 'fixie/config'
+require 'chef_fixie'
+require 'chef_fixie/config'
 
-RSpec.describe Fixie::CheckOrgAssociations, "Association checker" do
+RSpec.describe ChefFixie::CheckOrgAssociations, "Association checker" do
   let (:test_org_name) { "ponyville"}
-  let (:orgs) { Fixie::Sql::Orgs.new }
+  let (:orgs) { ChefFixie::Sql::Orgs.new }
   let (:test_org) { orgs[test_org_name] }
 
-  let (:users) { Fixie::Sql::Users.new }
+  let (:users) { ChefFixie::Sql::Users.new }
   let (:adminuser) { users['rainbowdash'] }
   let (:notorguser) { users['mary'] }
 
@@ -18,14 +18,14 @@ RSpec.describe Fixie::CheckOrgAssociations, "Association checker" do
 
   context "Individual user check" do
     it "Works on expected sane org/user pair" do
-      expect(Fixie::CheckOrgAssociations.check_association(test_org, adminuser)).to be true
-      expect(Fixie::CheckOrgAssociations.check_association(test_org_name, adminuser.name)).to be true
+      expect(ChefFixie::CheckOrgAssociations.check_association(test_org, adminuser)).to be true
+      expect(ChefFixie::CheckOrgAssociations.check_association(test_org_name, adminuser.name)).to be true
     end
 
   end
   context "Individual user check" do
     before :each do
-      expect(Fixie::CheckOrgAssociations.check_association(test_org, adminuser)).to be true
+      expect(ChefFixie::CheckOrgAssociations.check_association(test_org, adminuser)).to be true
     end
 
     after :each do
@@ -40,7 +40,7 @@ RSpec.describe Fixie::CheckOrgAssociations, "Association checker" do
 
     it "Detects user not associated" do
       # break it
-      expect(Fixie::CheckOrgAssociations.check_association(test_org, notorguser)).to be :not_associated
+      expect(ChefFixie::CheckOrgAssociations.check_association(test_org, notorguser)).to be :not_associated
     end
 
     # TODO: Write missing USAG test, but can't until we can restore the USAG or use disposable org
@@ -50,7 +50,7 @@ RSpec.describe Fixie::CheckOrgAssociations, "Association checker" do
       usag =  test_org.groups[adminuser.id]
       usag.group_delete(adminuser)
 
-      expect(Fixie::CheckOrgAssociations.check_association(test_org, adminuser)).to be :user_not_in_usag
+      expect(ChefFixie::CheckOrgAssociations.check_association(test_org, adminuser)).to be :user_not_in_usag
     end
 
     it "Detects usag missing from users group" do
@@ -58,14 +58,14 @@ RSpec.describe Fixie::CheckOrgAssociations, "Association checker" do
       usag =  test_org.groups[adminuser.id]
       test_org.groups['users'].group_delete(usag)
 
-      expect(Fixie::CheckOrgAssociations.check_association(test_org, adminuser)).to be :usag_not_in_users
+      expect(ChefFixie::CheckOrgAssociations.check_association(test_org, adminuser)).to be :usag_not_in_users
     end
 
     it "Detects global admins missing read" do
       # break it
       adminuser.ace_delete(:read, test_org.global_admins)
 
-      expect(Fixie::CheckOrgAssociations.check_association(test_org, adminuser)).to be :global_admins_lacks_read
+      expect(ChefFixie::CheckOrgAssociations.check_association(test_org, adminuser)).to be :global_admins_lacks_read
     end
 
     # TODO test zombie invite; need some way to create it.
@@ -74,7 +74,7 @@ RSpec.describe Fixie::CheckOrgAssociations, "Association checker" do
 
   context "Individual user fixup" do
     before :each do
-      expect(Fixie::CheckOrgAssociations.check_association(test_org, adminuser)).to be true
+      expect(ChefFixie::CheckOrgAssociations.check_association(test_org, adminuser)).to be true
     end
 
     after :each do
@@ -89,7 +89,7 @@ RSpec.describe Fixie::CheckOrgAssociations, "Association checker" do
 
     it "Detects user not associated" do
       # break it
-      expect(Fixie::CheckOrgAssociations.check_association(test_org, notorguser)).to be :not_associated
+      expect(ChefFixie::CheckOrgAssociations.check_association(test_org, notorguser)).to be :not_associated
     end
 
     # TODO: Write missing USAG test, but can't until we can restore the USAG or use disposable org
@@ -99,8 +99,8 @@ RSpec.describe Fixie::CheckOrgAssociations, "Association checker" do
       usag =  test_org.groups[adminuser.id]
       usag.group_delete(adminuser)
 
-      expect(Fixie::CheckOrgAssociations.fix_association(test_org, adminuser)).to be true
-      expect(Fixie::CheckOrgAssociations.check_association(test_org, adminuser)).to be true
+      expect(ChefFixie::CheckOrgAssociations.fix_association(test_org, adminuser)).to be true
+      expect(ChefFixie::CheckOrgAssociations.check_association(test_org, adminuser)).to be true
     end
 
     it "Fixes usag missing from users group" do
@@ -108,16 +108,16 @@ RSpec.describe Fixie::CheckOrgAssociations, "Association checker" do
       usag =  test_org.groups[adminuser.id]
       test_org.groups['users'].group_delete(usag)
 
-      expect(Fixie::CheckOrgAssociations.fix_association(test_org, adminuser)).to be true
-      expect(Fixie::CheckOrgAssociations.check_association(test_org, adminuser)).to be true
+      expect(ChefFixie::CheckOrgAssociations.fix_association(test_org, adminuser)).to be true
+      expect(ChefFixie::CheckOrgAssociations.check_association(test_org, adminuser)).to be true
     end
 
     it "Fixes global admins missing read" do
       # break it
       adminuser.ace_delete(:read, test_org.global_admins)
 
-      expect(Fixie::CheckOrgAssociations.fix_association(test_org, adminuser)).to be true
-      expect(Fixie::CheckOrgAssociations.check_association(test_org, adminuser)).to be true
+      expect(ChefFixie::CheckOrgAssociations.fix_association(test_org, adminuser)).to be true
+      expect(ChefFixie::CheckOrgAssociations.check_association(test_org, adminuser)).to be true
     end
 
     # TODO test zombie invite; need some way to create it.
@@ -129,8 +129,8 @@ RSpec.describe Fixie::CheckOrgAssociations, "Association checker" do
   context "Global org check" do
 
     it "Works on expected sane org" do
-      expect(Fixie::CheckOrgAssociations.check_associations("acme")).to be true
-      expect(Fixie::CheckOrgAssociations.check_associations(orgs["acme"])).to be true
+      expect(ChefFixie::CheckOrgAssociations.check_associations("acme")).to be true
+      expect(ChefFixie::CheckOrgAssociations.check_associations(orgs["acme"])).to be true
     end
 
   end

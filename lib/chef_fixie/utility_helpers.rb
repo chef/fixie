@@ -18,29 +18,29 @@
 # Author: Mark Anderson <mark@chef.io>
 #
 
-require 'fixie/config'
-require 'fixie/authz_objects'
-require 'fixie/authz_mapper'
+require 'chef_fixie/config'
+require 'chef_fixie/authz_objects'
+require 'chef_fixie/authz_mapper'
 
-module Fixie
+module ChefFixie
   module UtilityHelpers
     def self.orgs
-      @orgs ||= Fixie::Sql::Orgs.new
+      @orgs ||= ChefFixie::Sql::Orgs.new
     end
     def self.users
-      @users ||= Fixie::Sql::Users.new
+      @users ||= ChefFixie::Sql::Users.new
     end
     def self.assocs
-      @assocs ||= Fixie::Sql::Associations.new
+      @assocs ||= ChefFixie::Sql::Associations.new
     end
     def self.invites
-      invites ||= Fixie::Sql::Invites.new
+      invites ||= ChefFixie::Sql::Invites.new
     end
 
     def self.make_user(user)
       if user.is_a?(String)
         return users[user]
-      elsif user.is_a?(Fixie::Sql::User)
+      elsif user.is_a?(ChefFixie::Sql::User)
         return user
       else
         raise Exception "Expected a user, got a #{user.class}"
@@ -49,7 +49,7 @@ module Fixie
     def self.make_org(org)
       if org.is_a?(String)
         return orgs[org]
-      elsif org.is_a?(Fixie::Sql::Org)
+      elsif org.is_a?(ChefFixie::Sql::Org)
         return org
       else
         raise Exception "Expected an org, got a #{org.class}"

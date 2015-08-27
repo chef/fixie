@@ -1,14 +1,14 @@
 
 require 'rspec'
 require "spec_helper"
-require 'fixie'
-require 'fixie/config'
+require 'chef_fixie'
+require 'chef_fixie/config'
 
-RSpec.describe Fixie::Sql::Orgs, "Organizations access" do
+RSpec.describe ChefFixie::Sql::Orgs, "Organizations access" do
   let (:test_org) { "ponyville"}
 
   context "Basic access to orgs" do
-    let (:orgs) { Fixie::Sql::Orgs.new }
+    let (:orgs) { ChefFixie::Sql::Orgs.new }
     it "We find more than one org" do
       expect(orgs.inner.count).to be > 0
     end
@@ -29,7 +29,7 @@ RSpec.describe Fixie::Sql::Orgs, "Organizations access" do
   end
 
   context "Search accessors work correctly" do
-    let (:orgs) { Fixie::Sql::Orgs.new }
+    let (:orgs) { ChefFixie::Sql::Orgs.new }
     let (:the_org) { orgs[test_org] }
 
     it "We can find an org by name" do

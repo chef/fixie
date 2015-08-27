@@ -21,14 +21,14 @@ require 'pp'
 require 'ffi_yajl'
 require 'chef/http'
 
-require 'fixie/config'
+require 'chef_fixie/config'
 
-module Fixie
+module ChefFixie
 
   class AuthzApi
     def initialize(user=nil)
-      @requestor_authz = user ? user : Fixie.configure { |x| x.superuser_id }
-      @auth_uri ||= Fixie.configure { |x| x.authz_uri }
+      @requestor_authz = user ? user : ChefFixie.configure { |x| x.superuser_id }
+      @auth_uri ||= ChefFixie.configure { |x| x.authz_uri }
       @rest = Chef::HTTP.new(@auth_uri)
     end
 
@@ -150,7 +150,7 @@ module Fixie
     end
     # Todo: filter this by scope and type
     def acl
-      Fixie::AuthzMapper.struct_to_name(acl_raw)
+      ChefFixie::AuthzMapper.struct_to_name(acl_raw)
     end
 
     def ace_get_util(action)
@@ -168,7 +168,7 @@ module Fixie
     end
     # Todo: filter this by scope and type
     def ace(action)
-      Fixie::AuthzMapper.struct_to_name(ace_raw(action))
+      ChefFixie::AuthzMapper.struct_to_name(ace_raw(action))
     end
 
     def expand_actions(action)
@@ -256,7 +256,7 @@ module Fixie
     end
     # Todo: filter this by scope and type
     def group
-      Fixie::AuthzMapper.struct_to_name(group_raw)
+      ChefFixie::AuthzMapper.struct_to_name(group_raw)
     end
 
     def group_add_raw(actor_or_group, entity)
