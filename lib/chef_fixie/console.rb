@@ -31,7 +31,7 @@ module ChefFixie
 
     def start
       configure
-      Fixie.setup
+      ChefFixie.setup
       configure_pry
       Pry.start
     end
@@ -41,7 +41,7 @@ module ChefFixie
       if ARGV.first && ARGV[0].chars.first != "-" && config_file = ARGV.shift
         config_file = File.expand_path(config_file)
       end
-      Fixie.load_config(config_file)
+      ChefFixie.load_config(config_file)
 
       options = {}
       OptionParser.new do |opt|

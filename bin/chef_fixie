@@ -2,4 +2,4 @@
 
 require 'chef_fixie/console'
 
-Fixie::Console.start
+ChefFixie::Console.start
