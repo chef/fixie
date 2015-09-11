@@ -17,11 +17,11 @@
 # Author: Mark Anderson <mark@chef.io>
 
 require 'sequel'
-require 'chef_fixie/config'
-require 'chef_fixie/sql'
-require 'chef_fixie/sql_objects'
+require_relative 'chef_fixie/config'
+require_relative 'chef_fixie/sql'
+require_relative 'chef_fixie/sql_objects'
 
 # This doesn't work because of initialization order, figure it out.
-require 'chef_fixie/check_org_associations'
+require_relative 'chef_fixie/check_org_associations'
 
 Sequel.extension :inflector

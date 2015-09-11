@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
-require 'chef_fixie/console'
+require_relative '../lib/chef_fixie/console'
 
 ChefFixie::Console.start

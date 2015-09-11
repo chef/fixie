@@ -18,9 +18,9 @@
 # Author: Mark Anderson <mark@chef.io>
 #
 
-require 'chef_fixie/config'
-require 'chef_fixie/authz_objects'
-require 'chef_fixie/authz_mapper'
+require_relative 'config'
+require_relative 'authz_objects'
+require_relative 'authz_mapper'
 
 module ChefFixie
   module UtilityHelpers

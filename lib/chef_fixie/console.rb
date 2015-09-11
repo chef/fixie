@@ -22,8 +22,8 @@ require 'optparse'
 require 'pp'
 require 'pry'
 
-require 'chef_fixie'
-require 'chef_fixie/context'
+require_relative '../chef_fixie'
+require_relative 'context'
 
 module ChefFixie
   module Console

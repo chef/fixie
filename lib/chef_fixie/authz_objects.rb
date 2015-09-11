@@ -21,7 +21,7 @@ require 'pp'
 require 'ffi_yajl'
 require 'chef/http'
 
-require 'chef_fixie/config'
+require_relative 'config'
 
 module ChefFixie
 
