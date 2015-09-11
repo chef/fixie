@@ -145,6 +145,10 @@ module ChefFixie
       [:unparsed, result] # todo figure this out in more detail
     end
 
+    def authz_delete
+      authz_api.delete(prefix)
+    end
+
     def acl_raw
       authz_api.get("#{prefix}/acl")
     end
@@ -257,6 +261,9 @@ module ChefFixie
     # Todo: filter this by scope and type
     def group
       ChefFixie::AuthzMapper.struct_to_name(group_raw)
+    end
+    def list
+      group
     end
 
     def group_add_raw(actor_or_group, entity)
