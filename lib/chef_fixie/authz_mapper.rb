@@ -18,8 +18,8 @@
 #
 
 require 'pp'
-require 'chef_fixie/config'
-require 'chef_fixie/authz_objects'
+require_relative 'config'
+require_relative 'authz_objects'
 
 module ChefFixie
   module AuthzMapper

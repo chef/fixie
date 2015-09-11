@@ -20,7 +20,7 @@ require 'ffi_yajl'
 require 'uuidtools'
 require 'sequel'
 
-require 'chef_fixie/config'
+require_relative 'config'
 
 Sequel.default_timezone = :utc
 
