@@ -70,7 +70,6 @@ module ChefFixie
       end
       def self.plural(name)
         name = self.to_name(name)
-        pp :name_plural=>name
         name.to_s.pluralize
       end
     end
