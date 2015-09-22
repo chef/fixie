@@ -29,11 +29,9 @@ module ChefFixie
 
   def self.load_config(config_file = nil)
     if config_file
-      puts "loading config: #{config_file}..."
       Kernel.load(config_file)
     else
       path = "/etc/opscode"
-      puts "loading config from #{path}"
       ChefFixie::Config.instance.load_from_pc(path)
     end
   end
