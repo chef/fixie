@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2014-2015 Chef Software Inc. 
+# Copyright (c) 2014-2015 Chef Software Inc.
 # License :: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,11 +29,11 @@ module ChefFixie
 
   def self.load_config(config_file = nil)
     if config_file
-      puts "loading config: #{config_file}..."
+      puts "loading config: #{config_file}..." if ChefFixie::Console.started_from_command_line?
       Kernel.load(config_file)
     else
       path = "/etc/opscode"
-      puts "loading config from #{path}"
+      puts "loading config from #{path}" if ChefFixie::Console.started_from_command_line?
       ChefFixie::Config.instance.load_from_pc(path)
     end
   end
@@ -108,19 +108,19 @@ module ChefFixie
       authz_vip = authz_config['vip']
       authz_port = authz_config['port']
       @authz_uri = "http://#{authz_vip}:#{authz_port}"
-      
+
       @superuser_id = authz_config['superuser_id']
 
       sql_config = config['private_chef']['postgresql']
       erchef_config = config['private_chef']['opscode-erchef']
-      
+
       sql_user = sql_config['sql_user'] || erchef_config['sql_user']
       sql_pw = sql_config['sql_password'] || erchef_config['sql_password']
       sql_vip = sql_config['vip']
       sql_port = sql_config['port']
-      
+
       @sql_database = "postgres://#{sql_user}:#{sql_pw}@#{sql_vip}/opscode_chef"
-      
+
       @pivotal_key = configdir + "pivotal.pem"
     end
 

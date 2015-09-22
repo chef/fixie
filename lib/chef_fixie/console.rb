@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2015 Chef Software Inc. 
+# Copyright (c) 2015 Chef Software Inc.
 # License :: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,6 +30,7 @@ module ChefFixie
     extend self
 
     def start
+      @@started_from_command_line = true
       configure
       ChefFixie.setup
       configure_pry
@@ -85,6 +86,10 @@ irb_help
 
 HALP
       end
+    end
+
+    def started_from_command_line?
+      @@started_from_command_line == true
     end
 
   end
