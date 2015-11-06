@@ -112,9 +112,10 @@ module ChefFixie
       @superuser_id = authz_config['superuser_id']
 
       sql_config = config['private_chef']['postgresql']
+      erchef_config = config['private_chef']['opscode-erchef']
       
-      sql_user = sql_config['sql_user']
-      sql_pw = sql_config['sql_password']
+      sql_user = sql_config['sql_user'] || erchef_config['sql_user']
+      sql_pw = sql_config['sql_password'] || erchef_config['sql_password']
       sql_vip = sql_config['vip']
       sql_port = sql_config['port']
       
