@@ -145,8 +145,12 @@ module ChefFixie
       def global_admins
         name = self.name
         global_admins_name = "#{name}_global_admins"
-        ChefFixie::Sql::Groups.new["#{name}_global_admins"]
+        read_access_name = "#{name}_read_access_group"
+        ChefFixie::Sql::Groups.new[global_admins_name] || \
+          ChefFixie::Sql::Groups.new[read_access_name]
       end
+
+      alias read_access_group global_admins
 
       # Iterators for objects in authz; using containers to enumerate things
       # It might be better to metaprogram this up instead,
