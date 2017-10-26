@@ -57,6 +57,13 @@ module ChefFixie
       end
     end
 
+    def usag_for_user(org, user)
+      user = make_user(user)
+      org = make_org(org)
+      org.groups[user.id]
+
+    end
+
     def self.check_association(org, user, global_admins = nil)
       # magic to make usage easier
       org = make_org(org)
@@ -201,41 +208,31 @@ module ChefFixie
       end
       return true
     end
-
-
-    ## TODO: Port this
+    
     def self.remove_association(org, user)
       # magic to make usage easier
-      org = orgs[org] if org.is_a?(String)
-      user = users[user] if user.is_a?(String)
-
+      org = make_org(org)
+      user = make_user(user)
+      
       # remove USAG
-      delete_usag_for_user(orgname,username)
+      usag = org.groups[user.id]
+      usag.delete if usag
 
+      # remove from any groups they are in
+      org.groups.all(:all).each do |g|
+        g.group_delete(user) if g.member?(user)
+      end
+      
       # remove read ACE
-      u_aid =  user.authz_id
-      ga = OrgMapper::CouchSupport.doc_from_view("#{orgname}_global_admins", "#{Group}/by_groupname")
-      ga_aid = user_to_authz(ga["_id"])
-
-      read_ace = OrgMapper::RawAuth.get("actors/#{u_aid}/acl/read")
-      read_ace["groups"] -= [ga_aid]
-      OrgMapper::RawAuth.put("actors/#{u_aid}/acl/read", read_ace)
+      user.ace_delete(:read, org.global_admins)
 
       # remove association record
+      assoc = assocs.by_org_id_user_id(org.id,user.id)
+      assoc.delete if assoc
 
-      org_assoc = OrgMapper::CouchSupport.associations_for_org(orgname)
-      doc = org_assoc.select {|x| x[:uid] == user.id}.first
-
-      OrgMapper::CouchSupport.delete_account_doc(doc[:id])
-
-      # clean up excess invites
-      invites = OrgMapper::CouchSupport.invites_for_org(orgname)
-      invite_map = invites.inject({}) {|a,e| a[e[:name]] = e; a}
-
-      if invite_map.has_key?(username)
-        invite = invite_map[username]
-        OrgMapper::CouchSupport.delete_account_doc(invite[:id])
-      end
+      # remove any invites
+      invite = invites.by_org_id_user_id(org.id,user.id)
+      invite.delete if invite
     end
   end
 end
