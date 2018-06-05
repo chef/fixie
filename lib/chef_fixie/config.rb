@@ -21,6 +21,7 @@
 require 'singleton'
 require 'ffi_yajl'
 require 'pathname'
+require 'veil'
 
 module ChefFixie
   def self.configure
@@ -104,18 +105,20 @@ module ChefFixie
       config_files = %w(chef-server-running.json)
       config = load_json_from_path([configdir], config_files)
 
+      secrets = load_secrets_from_path([configdir], %w(private-chef-secrets.json) )
+
       authz_config = config['private_chef']['oc_bifrost']
       authz_vip = authz_config['vip']
       authz_port = authz_config['port']
       @authz_uri = "http://#{authz_vip}:#{authz_port}"
 
-      @superuser_id = authz_config['superuser_id']
+      @superuser_id = dig(secrets,['oc_bifrost','superuser_id']) || authz_config['superuser_id']
 
       sql_config = config['private_chef']['postgresql']
       erchef_config = config['private_chef']['opscode-erchef']
 
       sql_user = sql_config['sql_user'] || erchef_config['sql_user']
-      sql_pw = sql_config['sql_password'] || erchef_config['sql_password']
+      sql_pw = dig(secrets, ['opscode_erchef', 'sql_password']) || sql_config['sql_password'] || erchef_config['sql_password']
       sql_vip = sql_config['vip']
       sql_port = sql_config['port']
 
@@ -136,5 +139,35 @@ module ChefFixie
         end
       end
     end
+    def load_secrets_from_path(pathlist, filelist)
+      pathlist.each do |path|
+        filelist.each do |file|
+          configfile = path + file
+          if configfile.file?
+            data = Veil::CredentialCollection::ChefSecretsFile.from_file(configfile)
+            return data
+          end
+        end
+      end
+      nil
+    end
+
+    def dig(hash, list)
+      if hash.respond_to?(:get)
+        hash.get(*list)
+      elsif hash.nil?
+        nil
+      elsif list.empty?
+        hash
+      else
+        element = list.shift
+        if hash.has_key?(element)
+          dig(hash[element], list)
+        else
+          nil
+        end
+      end
+    end
+
   end
 end
