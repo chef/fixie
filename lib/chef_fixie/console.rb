@@ -18,12 +18,12 @@
 #
 # Much of this code was orginally derived from the orgmapper tool, which had many varied authors.
 
-require 'optparse'
-require 'pp'
-require 'pry'
+require "optparse"
+require "pp"
+require "pry"
 
-require_relative '../chef_fixie'
-require_relative 'context'
+require_relative "../chef_fixie"
+require_relative "context"
 
 module ChefFixie
   module Console
@@ -47,9 +47,9 @@ module ChefFixie
       options = {}
       OptionParser.new do |opt|
         opt.banner = "Usage: fixie [config] [options]"
-        opt.on('--authz_uri AUTH_URI', "The URI of the opscode authz service") { |v| options[:authz_uri] =v }
-        opt.on("--sql_database DATABASE", 'The URI of the opscode_chef database') { |v| options[:sql_database] = v }
-        opt.on_tail('-h', '--help', 'Show this message') do
+        opt.on("--authz_uri AUTH_URI", "The URI of the opscode authz service") { |v| options[:authz_uri] = v }
+        opt.on("--sql_database DATABASE", "The URI of the opscode_chef database") { |v| options[:sql_database] = v }
+        opt.on_tail("-h", "--help", "Show this message") do
           puts opt
           puts "\nExample configuration file:\n\n"
           puts ChefFixie::Config.instance.example_config
@@ -68,7 +68,7 @@ module ChefFixie
       Pry.config.history.file = "~/.fixie_history"
       Pry.config.prompt_name = "fixie"
       Pry::Commands.block_command("fixie-help", "Show fixie's help") do
-      output.puts(<<-HALP)
+        output.puts(<<-HALP)
 ** ORGS **
 * access with ORGS or ORGS
 * access a specific org: ORGS['orgname']

@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2015 Chef Software Inc. 
+# Copyright (c) 2015 Chef Software Inc.
 # License :: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,9 +18,8 @@
 #
 # Much of this code was orginally derived from the orgmapper tool, which had many varied authors.
 
-
 module ChefFixie
-    module Context
+  module Context
 
     def describe_orgs
       OrgMetrics.org_stats(orgs)
@@ -67,6 +66,5 @@ module ChefFixie
 
       ChefFixie::Dissociator.dissociate_user(org, user)
     end
-
   end
 end

@@ -17,12 +17,12 @@
 # Author: Mark Anderson <mark@chef.io>
 #
 
-require 'pp'
-require 'sequel'
+require "pp"
+require "sequel"
 
-require_relative 'config'
-require_relative 'authz_objects'
-require_relative 'authz_mapper'
+require_relative "config"
+require_relative "authz_objects"
+require_relative "authz_mapper"
 
 Sequel.extension :inflector
 
@@ -51,25 +51,28 @@ module ChefFixie
           else
             class_or_name.class.to_s
           end
-        name.split('::')[-1]
+        name.split("::")[-1]
       end
 
       # The class for the table, e.g. Orgs
       def self.table_class(name)
-        name = self.to_name(name)
+        name = to_name(name)
         (base + name.to_s.pluralize.camelize).constantize
       end
+
       # The class for one instance of the object, e.g. Org
       def self.object_class(name)
-        name = self.to_name(name)
+        name = to_name(name)
         (base + name.to_s.singularize.camelize).constantize
       end
+
       def self.singular(name)
-        name = self.to_name(name)
+        name = to_name(name)
         name.to_s.singularize
       end
+
       def self.plural(name)
-        name = self.to_name(name)
+        name = to_name(name)
         name.to_s.pluralize
       end
     end
@@ -79,9 +82,11 @@ module ChefFixie
       def initialize(data)
         @data = data
       end
+
       def data
         @data
       end
+
       def table
         Relationships.table_class(self).new
       end
@@ -90,26 +95,27 @@ module ChefFixie
       def self.ro_access(*args)
         args.each do |field|
           fundef = "def #{field}; @data.#{field}; end"
-          self.class_eval(fundef)
+          class_eval(fundef)
         end
       end
       # TODO figure out model for write access
 
       def self.name_field(field)
         fundef = "def name; @data.#{field}; end"
-        self.class_eval(fundef)
+        class_eval(fundef)
       end
 
       def self.std_timestamp
         [:created_at, :updated_at].each do |i|
-          self.ro_access(i)
+          ro_access(i)
         end
       end
+
       # Pretty much any object with an authz id has these fields
       def self.std_authz
-        self.std_timestamp
+        std_timestamp
         [:authz_id, :last_updated_by].each do |i|
-          self.ro_access(i)
+          ro_access(i)
         end
       end
 
@@ -117,7 +123,7 @@ module ChefFixie
         rows = table.by_id(id)
         raise "id #{id} matches more than one object" if rows.all.count != 1
         rows.inner.delete
-        if self.respond_to?(:authz_delete)
+        if respond_to?(:authz_delete)
           authz_delete
         end
       end
@@ -131,13 +137,14 @@ module ChefFixie
           funname = Relationships.plural(object)
           # defer evaluation of mapper to make sure we have a chance for everyone to initialize
           fundef = "def #{funname}; Relationships.table_class(:#{object}).new.by_org_id(org_id); end"
-          self.class_eval(fundef)
+          class_eval(fundef)
         end
       end
 
       def initialize(data)
         super(data)
       end
+
       def org_id
         data[:id]
       end
@@ -158,7 +165,7 @@ module ChefFixie
       # TODO Write some tests to validate that this stuff
       # works, since it depends on a lot of name magic...
 
-      NAME_FIXUP = {"data" => "data_bags", "sandboxes" => nil}
+      NAME_FIXUP = { "data" => "data_bags", "sandboxes" => nil }
       def objects_by_container_type(container)
         name = NAME_FIXUP.has_key?(container) ? NAME_FIXUP[container] : container
         return [] if name.nil?
@@ -176,7 +183,7 @@ module ChefFixie
             yield objects
           end
         end
-        return
+        nil
       end
 
       def each_authz_object
@@ -185,7 +192,7 @@ module ChefFixie
             yield object
           end
         end
-        return
+        nil
       end
 
       scoped_type :container, :group, :client,
@@ -256,7 +263,6 @@ module ChefFixie
     # opc_customers_id_seq opc_users org_migration_state
     # org_migration_state_id_seq policy_revisions
     # policy_revisions_policy_groups_association sandboxed_checksums
-
 
     class CookbookArtifact < SqlObject
       include AuthzObjectMixin
@@ -342,31 +348,33 @@ module ChefFixie
       def get_table
         :unknown_table
       end
+
       def mk_element(x)
         x
       end
 
       def initialize(tablespec = nil)
         ChefFixie::Sql.default_connection
-        @inner = tablespec || Sequel::Model(self.get_table)
+        @inner = tablespec || Sequel::Model(get_table)
       end
+
       def inner
         # Make sure we have init
         @inner
       end
 
       def filter_core(field, exp)
-        self.class.new(inner.filter(field=>exp))
+        self.class.new(inner.filter(field => exp))
       end
 
-      def all(max_count=:default)
+      def all(max_count = :default)
         if max_count == :default
           max_count = ChefFixie::Sql::SqlTable.max_count_default
         end
         if max_count != :all
-          return :too_many_results if (inner.count > max_count)
+          return :too_many_results if inner.count > max_count
         end
-        elements = inner.all.map {|org| mk_element(org) }
+        elements = inner.all.map { |org| mk_element(org) }
       end
 
       #
@@ -375,7 +383,7 @@ module ChefFixie
       #     https://stackoverflow.com/questions/9658724/ruby-metaprogramming-class-eval/9658775#9658775
       def self.primary(arg)
         name = :"by_#{arg}"
-        self.class_eval("def [](arg); #{name}(arg).all(1).first; end")
+        class_eval("def [](arg); #{name}(arg).all(1).first; end")
 
         listfun = <<EOLF
 def list(max_count=:default)
@@ -387,26 +395,27 @@ def list(max_count=:default)
   end
 end
 EOLF
-        self.class_eval(listfun)
+        class_eval(listfun)
       end
 
       def self.filter_by(*args)
         args.each do |field|
           name = "by_#{field}"
           fundef = "def #{name}(exp); filter_core(:#{field},exp); end"
-          self.class_eval(fundef)
+          class_eval(fundef)
         end
       end
 
       def self.table(name)
         fundef = "def get_table; :#{name}; end"
-        self.class_eval(fundef)
+        class_eval(fundef)
       end
+
       # doesn't work yet
       # element Org in class Orgs will fail because it can't find Org (undefined)
       def self.element(name)
         fundef = "ElementType = name; def mk_element(x); #{name}.new(x); end"
-        self.class_eval(fundef)
+        class_eval(fundef)
       end
     end
 
@@ -418,7 +427,7 @@ EOLF
       primary :name
       filter_by :name, :id, :full_name, :authz_id
 
-      GlobalOrg = "0"*32
+      GlobalOrg = "0" * 32
 
       def self.org_guid_to_name(guid)
         "global" if guid == GlobalOrg
@@ -439,7 +448,7 @@ EOLF
 
       def by_org_id_user_id(org_id, user_id)
         # db table constraint guarantees that this is unique
-        inner.filter(:org_id=>org_id, :user_id=>user_id).all.first
+        inner.filter(:org_id => org_id, :user_id => user_id).all.first
       end
 
     end
@@ -449,7 +458,7 @@ EOLF
 
       def by_org_id_user_id(org_id, user_id)
         # db table constraint guarantees that this is unique
-        inner.filter(:org_id=>org_id, :user_id=>user_id).all.first
+        inner.filter(:org_id => org_id, :user_id => user_id).all.first
       end
     end
     class Users < SqlTable
@@ -551,7 +560,7 @@ EOLF
       filter_by :name, :id, :org_id, :authz_id
     end
 
-    class Roles  < SqlTable
+    class Roles < SqlTable
       table :roles
       element Sql::Role
       register_authz :role, :object
@@ -559,8 +568,6 @@ EOLF
       primary :name
       filter_by :name, :id, :org_id, :authz_id, :last_updated_by
     end
-
-
 
   end
 end

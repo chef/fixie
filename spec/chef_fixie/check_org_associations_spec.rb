@@ -1,17 +1,17 @@
 # -*- indent-tabs-mode: nil; fill-column: 110 -*-
-require 'rspec'
+require "rspec"
 require "spec_helper"
-require 'chef_fixie'
-require 'chef_fixie/config'
+require "chef_fixie"
+require "chef_fixie/config"
 
 RSpec.describe ChefFixie::CheckOrgAssociations, "Association checker" do
-  let (:test_org_name) { "ponyville"}
+  let (:test_org_name) { "ponyville" }
   let (:orgs) { ChefFixie::Sql::Orgs.new }
   let (:test_org) { orgs[test_org_name] }
 
   let (:users) { ChefFixie::Sql::Users.new }
-  let (:adminuser) { users['rainbowdash'] }
-  let (:notorguser) { users['mary'] }
+  let (:adminuser) { users["rainbowdash"] }
+  let (:notorguser) { users["mary"] }
 
   # TODO this should use a freshly created object and purge it afterwords.
   # But we need to write the create object feature still
@@ -29,10 +29,10 @@ RSpec.describe ChefFixie::CheckOrgAssociations, "Association checker" do
     end
 
     after :each do
-      usag =  test_org.groups[adminuser.id]
+      usag = test_org.groups[adminuser.id]
 
       usag.group_add(adminuser)
-      test_org.groups['users'].group_add(usag)
+      test_org.groups["users"].group_add(usag)
 
       adminuser.ace_add(:read, test_org.global_admins)
 
@@ -47,7 +47,7 @@ RSpec.describe ChefFixie::CheckOrgAssociations, "Association checker" do
 
     it "Detects user missing from usag" do
       # break it
-      usag =  test_org.groups[adminuser.id]
+      usag = test_org.groups[adminuser.id]
       usag.group_delete(adminuser)
 
       expect(ChefFixie::CheckOrgAssociations.check_association(test_org, adminuser)).to be :user_not_in_usag
@@ -55,8 +55,8 @@ RSpec.describe ChefFixie::CheckOrgAssociations, "Association checker" do
 
     it "Detects usag missing from users group" do
       # break it
-      usag =  test_org.groups[adminuser.id]
-      test_org.groups['users'].group_delete(usag)
+      usag = test_org.groups[adminuser.id]
+      test_org.groups["users"].group_delete(usag)
 
       expect(ChefFixie::CheckOrgAssociations.check_association(test_org, adminuser)).to be :usag_not_in_users
     end
@@ -78,10 +78,10 @@ RSpec.describe ChefFixie::CheckOrgAssociations, "Association checker" do
     end
 
     after :each do
-      usag =  test_org.groups[adminuser.id]
+      usag = test_org.groups[adminuser.id]
 
       usag.group_add(adminuser)
-      test_org.groups['users'].group_add(usag)
+      test_org.groups["users"].group_add(usag)
 
       adminuser.ace_add(:read, test_org.global_admins)
 
@@ -106,7 +106,7 @@ RSpec.describe ChefFixie::CheckOrgAssociations, "Association checker" do
     it "Fixes usag missing from users group" do
       # break it
       usag =  test_org.groups[adminuser.id]
-      test_org.groups['users'].group_delete(usag)
+      test_org.groups["users"].group_delete(usag)
 
       expect(ChefFixie::CheckOrgAssociations.fix_association(test_org, adminuser)).to be true
       expect(ChefFixie::CheckOrgAssociations.check_association(test_org, adminuser)).to be true
@@ -124,7 +124,6 @@ RSpec.describe ChefFixie::CheckOrgAssociations, "Association checker" do
 
   end
 
-
   # TODO Break the org and check it!
   context "Global org check" do
 
@@ -134,7 +133,5 @@ RSpec.describe ChefFixie::CheckOrgAssociations, "Association checker" do
     end
 
   end
-
-  
 
 end

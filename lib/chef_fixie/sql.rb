@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2014-2015 Chef Software Inc. 
+# Copyright (c) 2014-2015 Chef Software Inc.
 # License :: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,20 +16,20 @@
 #
 # Author: Mark Anderson <mark@chef.io>
 
-require 'ffi_yajl'
-require 'uuidtools'
-require 'sequel'
+require "ffi_yajl"
+require "uuidtools"
+require "sequel"
 
-require_relative 'config'
+require_relative "config"
 
 Sequel.default_timezone = :utc
 
 module ChefFixie
   module Sql
-    
+
     class InvalidConfig < StandardError
     end
-    
+
     # A connection string passed to Sequel.connect()
     #
     # Examples:
@@ -46,25 +46,25 @@ module ChefFixie
 
     # Returns the connection string or raises an error if you didn't set one.
     def self.connection_string
-      @connection_string ||= ChefFixie.configure {|x| x.sql_database }
+      @connection_string ||= ChefFixie.configure { |x| x.sql_database }
     end
-    
+
     # Returns a Sequel::Data baseobject, which wraps access to the database.
     def self.default_connection
       @database ||= Sequel.connect(connection_string, :max_connections => 2)
       #      @database.loggers << Logger.new($stdout)
     end
-    
+
     # Generate a new UUID. Currently uses the v1 UUID scheme.
     def new_uuid
       UUIDTools::UUID.timestamp_create.hexdigest
     end
-    
+
     # Parse the portion of the object that's stored as a blob o' JSON
     def from_json(serialized_data)
       FFI_Yajl::Parser.parse(serialized_data, :symbolize_keys => true)
     end
-    
+
     # Encode the portion of the object that's stored as a blob o' JSON
     def as_json(data)
       FFI_Yajl::Encoder.encode(data)

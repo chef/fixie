@@ -18,10 +18,10 @@
 #
 # Much of this code was orginally derived from the orgmapper tool, which had many varied authors.
 
-require 'singleton'
-require 'ffi_yajl'
-require 'pathname'
-require 'veil'
+require "singleton"
+require "ffi_yajl"
+require "pathname"
+require "veil"
 
 module ChefFixie
   def self.configure
@@ -66,7 +66,7 @@ module ChefFixie
     KEYS = [:authz_uri, :sql_database, :superuser_id, :pivotal_key]
     KEYS.each { |k| attr_accessor k }
 
-    def merge_opts(opts={})
+    def merge_opts(opts = {})
       opts.each do |key, value|
         send("#{key}=".to_sym, value)
       end
@@ -84,7 +84,7 @@ module ChefFixie
         key_len > max ? key_len : max
       end
       KEYS.each do |key|
-        value = send(key) || 'default'
+        value = send(key) || "default"
         txt << "# %#{max_key_len}s: %s" % [key.to_s, value]
       end
       txt.join("\n")
@@ -102,25 +102,25 @@ module ChefFixie
     def load_from_pc(dir = "/etc/opscode")
       configdir = Pathname.new(dir)
 
-      config_files = %w(chef-server-running.json)
+      config_files = %w{chef-server-running.json}
       config = load_json_from_path([configdir], config_files)
 
-      secrets = load_secrets_from_path([configdir], %w(private-chef-secrets.json) )
+      secrets = load_secrets_from_path([configdir], %w{private-chef-secrets.json} )
 
-      authz_config = config['private_chef']['oc_bifrost']
-      authz_vip = authz_config['vip']
-      authz_port = authz_config['port']
+      authz_config = config["private_chef"]["oc_bifrost"]
+      authz_vip = authz_config["vip"]
+      authz_port = authz_config["port"]
       @authz_uri = "http://#{authz_vip}:#{authz_port}"
 
-      @superuser_id = dig(secrets,['oc_bifrost','superuser_id']) || authz_config['superuser_id']
+      @superuser_id = dig(secrets, %w{oc_bifrost superuser_id}) || authz_config["superuser_id"]
 
-      sql_config = config['private_chef']['postgresql']
-      erchef_config = config['private_chef']['opscode-erchef']
+      sql_config = config["private_chef"]["postgresql"]
+      erchef_config = config["private_chef"]["opscode-erchef"]
 
-      sql_user = sql_config['sql_user'] || erchef_config['sql_user']
-      sql_pw = dig(secrets, ['opscode_erchef', 'sql_password']) || sql_config['sql_password'] || erchef_config['sql_password']
-      sql_vip = sql_config['vip']
-      sql_port = sql_config['port']
+      sql_user = sql_config["sql_user"] || erchef_config["sql_user"]
+      sql_pw = dig(secrets, %w{opscode_erchef sql_password}) || sql_config["sql_password"] || erchef_config["sql_password"]
+      sql_vip = sql_config["vip"]
+      sql_port = sql_config["port"]
 
       @sql_database = "postgres://#{sql_user}:#{sql_pw}@#{sql_vip}/opscode_chef"
 
@@ -139,6 +139,7 @@ module ChefFixie
         end
       end
     end
+
     def load_secrets_from_path(pathlist, filelist)
       pathlist.each do |path|
         filelist.each do |file|

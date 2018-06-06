@@ -1,17 +1,16 @@
 
-require 'rspec'
+require "rspec"
 require "spec_helper"
-require 'chef_fixie'
-require 'chef_fixie/config'
+require "chef_fixie"
+require "chef_fixie/config"
 
 RSpec.describe ChefFixie::Sql::Associations, "Associations tests" do
   let (:test_org_name) { "ponyville" }
   let (:orgs) { ChefFixie::Sql::Orgs.new }
-  let (:test_org) { orgs[test_org_name]}
+  let (:test_org) { orgs[test_org_name] }
 
   let (:users) { ChefFixie::Sql::Users.new }
   let (:assocs) { ChefFixie::Sql::Associations.new }
-
 
   context "Basic functionality of association spec" do
     let ("test_user_name") { "fluttershy" }
@@ -37,11 +36,9 @@ RSpec.describe ChefFixie::Sql::Associations, "Associations tests" do
       expect(assoc_item.org_id).to eq(test_org.id)
 
       # test user not in org
-      expect(assocs.by_org_id_user_id(test_org.id, users['mary'].id)).to be_nil
+      expect(assocs.by_org_id_user_id(test_org.id, users["mary"].id)).to be_nil
     end
 
-
   end
-
 
 end

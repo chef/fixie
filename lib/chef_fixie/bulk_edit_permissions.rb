@@ -16,50 +16,53 @@
 #
 # Author: Mark Anderson <mark@chef.io>
 #
-require 'sequel'
+require "sequel"
 
-require_relative 'config.rb'
-require_relative 'authz_objects.rb'
-require_relative 'authz_mapper.rb'
+require_relative "config.rb"
+require_relative "authz_objects.rb"
+require_relative "authz_mapper.rb"
 
-require 'pp'
+require "pp"
 
 module ChefFixie
   module BulkEditPermissions
     def self.orgs
       @orgs ||= ChefFixie::Sql::Orgs.new
     end
+
     def self.users
       @users ||= ChefFixie::Sql::Users.new
     end
+
     def self.assocs
       @assocs ||= ChefFixie::Sql::Associations.new
     end
+
     def self.invites
       invites ||= ChefFixie::Sql::Invites.new
     end
 
     def self.check_permissions(org)
       org = orgs[org] if org.is_a?(String)
-      admins = org.groups['admins'].authz_id
-      pivotal = users['pivotal'].authz_id
+      admins = org.groups["admins"].authz_id
+      pivotal = users["pivotal"].authz_id
       errors = Hash.new({})
       org.each_authz_object do |object|
-        begin 
+        begin
           acl = object.acl_raw
-        rescue RestClient::ResourceNotFound=>e
+        rescue RestClient::ResourceNotFound => e
           puts "#{object.class} '#{object.name}' id '#{object.id}' missing authz info"
           # pp :object=>object, :e=>e
           next
         end
         broken_acl = {}
         # the one special case
-        acl.each do |k,v|
+        acl.each do |k, v|
           list = []
-          list << "pivotal" if !v['actors'].member?(pivotal)
+          list << "pivotal" if !v["actors"].member?(pivotal)
           # admins doesn't belong to the billing admins group
-          if object.class != ChefFixie::Sql::Group || object.name != 'billing-admins'
-            list << "admins" if !v['groups'].member?(admins)
+          if object.class != ChefFixie::Sql::Group || object.name != "billing-admins"
+            list << "admins" if !v["groups"].member?(admins)
           end
           broken_acl[k] = list if !list.empty?
         end
@@ -69,7 +72,7 @@ module ChefFixie
           errors[classname][object.name] = broken_acl
         end
       end
-      return errors
+      errors
     end
 
     def self.ace_add(list, ace_type, entity)
@@ -78,17 +81,18 @@ module ChefFixie
           item.ace_add(ace_type, entity)
         else
           puts "item.class is not a native authz type"
-          return
+          return nil
         end
       end
     end
+
     def self.ace_delete(list, ace_type, entity)
       list.each do |item|
         if item.respond_to?(:ace_delete)
           item.ace_delete(ace_type, entity)
         else
           puts "item.class is not a native authz type"
-          return
+          return nil
         end
       end
     end
@@ -128,11 +132,11 @@ module ChefFixie
     def self.add_admin_permissions(org)
       org = orgs[org] if org.is_a?(String)
       # rework when ace add takes multiple items...
-      admins = org.groups['admins']
-      pivotal = users['pivotal']
+      admins = org.groups["admins"]
+      pivotal = users["pivotal"]
       org.each_authz_object do |object|
         object.ace_add(:all, pivotal)
-        if object.class != ChefFixie::Sql::Group || object.name != 'billing-admins'
+        if object.class != ChefFixie::Sql::Group || object.name != "billing-admins"
           object.ace_add(:all, admins)
         end
       end
@@ -150,7 +154,7 @@ module ChefFixie
           puts "#{obj.name} from #{c.name}"
         end
       end
-      return
+      nil
     end
 
   end
