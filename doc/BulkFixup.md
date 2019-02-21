@@ -15,7 +15,7 @@ If a key group is deleted (such as users)
 ```ruby
 users_group.ace_add([:create,:read,:update,:delete], org.groups['admins'])
 users_group.ace_add([:create,:read,:update,:delete], USERS['pivotal'])
-``
+```
 
 * Restore users to the appropriate container ACLs
 ```ruby
