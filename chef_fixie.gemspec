@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_runtime_dependency "chef", ">= 11.12.2"
+  spec.add_runtime_dependency "chef", ">= 16.2.50"
   spec.add_runtime_dependency "ffi-yajl", ">= 1.2.0"
   spec.add_runtime_dependency "pg", "~> 0.17", ">= 0.17.1"
   spec.add_runtime_dependency "pry", "~> 0.10.1"
@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "uuidtools", "~> 2.1", ">= 2.1.3"
   spec.add_runtime_dependency 'veil'
 
-  spec.add_development_dependency "bundler", "~> 1.3"
+  spec.add_development_dependency "bundler", "~> 2.1"
   spec.add_development_dependency "rake", "~> 0"
   spec.add_development_dependency "rspec", "~> 0"
 end
