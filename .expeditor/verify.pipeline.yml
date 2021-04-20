@@ -12,7 +12,6 @@ expeditor:
 steps:
 - label: run-specs-ruby-2.6
   command:
-    - bundle install --jobs=7 --retry=3 --without development debug
     - .expeditor/run_linux_tests.sh rake
   expeditor:
     executor:
@@ -21,7 +20,6 @@ steps:
 
 - label: run-specs-ruby-2.7
   command:
-    - bundle install --jobs=7 --retry=3 --without development debug
     - .expeditor/run_linux_tests.sh rake
   expeditor:
     executor:
