@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2014-2015 Chef Software Inc. 
+# Copyright (c) 2014-2015 Chef Software Inc.
 # License :: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,9 +17,9 @@
 # Author: Mark Anderson <mark@chef.io>
 #
 
-require 'pp'
-require_relative 'config'
-require_relative 'authz_objects'
+require "pp"
+require_relative "config"
+require_relative "authz_objects"
 
 module ChefFixie
   module AuthzMapper
@@ -32,7 +32,7 @@ module ChefFixie
     #
     # Much of this might be better folded up into a sql stored procedure
     #
-   
+
     def self.included(base)
       base.extend(ClassMethods)
     end
@@ -44,9 +44,9 @@ module ChefFixie
       if objects.count == 1
         object = objects.first
         name = object.name
-        scope = 
-          if object.respond_to?(:org_id) 
-              ChefFixie::Sql::Orgs.org_guid_to_name(object.org_id)
+        scope =
+          if object.respond_to?(:org_id)
+            ChefFixie::Sql::Orgs.org_guid_to_name(object.org_id)
           else
             :global
           end
@@ -57,12 +57,12 @@ module ChefFixie
     end
 
     class ReverseMapper
-      attr_reader :names,:by_type, :instance
-                     
+      attr_reader :names, :by_type, :instance
+
       def initialize
         # name of object map
         @names ||= {}
-        @by_type ||= {:actor=>{}, :container=>{}, :group=>{}, :object=>{}}
+        @by_type ||= { :actor => {}, :container => {}, :group => {}, :object => {} }
         # maps class to a pre-created instance for efficiency
         @instance ||= {}
       end
@@ -75,14 +75,14 @@ module ChefFixie
         names[name] = klass
         by_type[type][name] = klass
       end
-      
+
       def dump
         pp names
       end
 
-      def authz_to_name(authz_id, ctype=nil)
+      def authz_to_name(authz_id, ctype = nil)
         types = if ctype.nil?
-                  AuthzUtils::Types
+                  AuthzUtils::TYPES
                 else
                   [ctype]
                 end
@@ -92,52 +92,50 @@ module ChefFixie
             return result if result != :unknown
           end
         end
-        return :unknown
+        :unknown
       end
     end
 
     def self.mapper
       @mapper ||= ReverseMapper.new
     end
-    
+
     def self.register(klass, name, type)
-      self.mapper.register(klass,name,type)
+      mapper.register(klass, name, type)
     end
 
     # Translates the json from authz for group membership and acls into a human readable form
     # This makes some assumptions about the shape of the data structure, but works well enough to
     # be quite useful
     def self.struct_to_name(s)
-      mapper = AuthzMapper::mapper      
+      mapper = AuthzMapper.mapper
       if s.kind_of?(Hash)
         s.keys.inject({}) do |h, k|
           v = s[k]
           if v.kind_of?(Array)
             case k
-            when 'actors'
-              h[k] = v.map {|a| mapper.authz_to_name(a,:actor) } #.sort We should sort these, but the way we're returning unknown causes sort 
-            when 'groups'
-              h[k] = v.map {|a| mapper.authz_to_name(a,:group) } #.sort to fail
+            when "actors"
+              h[k] = v.map { |a| mapper.authz_to_name(a, :actor) } #.sort We should sort these, but the way we're returning unknown causes sort
+            when "groups"
+              h[k] = v.map { |a| mapper.authz_to_name(a, :group) } #.sort to fail
             else
               h[k] = v
             end
           else
-            h[k] = self.struct_to_name(v)
+            h[k] = struct_to_name(v)
           end
           h
         end
       end
     end
-    
+
     module ClassMethods
       # TODO: We should be able to automatically figure out the type somehow.
       # At minimum should figure out a self check
       def register_authz(name, type)
-        AuthzMapper::register(self,name,type)
+        AuthzMapper.register(self, name, type)
       end
     end
-    
+
   end
 end
-
-  

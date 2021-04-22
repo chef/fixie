@@ -1,11 +1,11 @@
 
-require 'rspec'
+require "rspec"
 require "spec_helper"
-require 'chef_fixie'
-require 'chef_fixie/config'
+require "chef_fixie"
+require "chef_fixie/config"
 
 RSpec.describe ChefFixie::Sql::Orgs, "Organizations access" do
-  let (:test_org) { "ponyville"}
+  let (:test_org) { "ponyville" }
 
   context "Basic access to orgs" do
     let (:orgs) { ChefFixie::Sql::Orgs.new }
@@ -15,7 +15,7 @@ RSpec.describe ChefFixie::Sql::Orgs, "Organizations access" do
 
     it "We can list orgs" do
       # array matcher requires a splat. (I didn't know this )
-      expect(orgs.list).to include( * %w(acme ponyville wonderbolts) )
+      expect(orgs.list).to include( * %w{acme ponyville wonderbolts} )
     end
     it "We can list orgs with a limit" do
       # array matcher requires a splat. (I didn't know this )
@@ -38,7 +38,7 @@ RSpec.describe ChefFixie::Sql::Orgs, "Organizations access" do
     end
 
     # TODO: Automatically extract this from the filter by field
-    %w(name, id, full_name, authz_id).each do |accessor|
+    %w{name, id, full_name, authz_id}.each do |accessor|
       it "We can access an org by #{accessor}" do
         expect(orgs.by_name(test_org).all.count).to eq(1)
         expect(orgs.by_name(test_org).all.first.name).to eq(the_org.name)
@@ -46,8 +46,5 @@ RSpec.describe ChefFixie::Sql::Orgs, "Organizations access" do
     end
 
   end
-
-
-
 
 end

@@ -4,7 +4,7 @@
 # loaded once.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
-require 'chef_fixie/config'
+require "chef_fixie/config"
 
 def load_from_config_example
   # load from config file
@@ -13,7 +13,7 @@ def load_from_config_example
 end
 
 def load_from_opscode
-  ChefFixie::Config::instance.load_from_pc
+  ChefFixie::Config.instance.load_from_pc
 end
 
 RSpec.configure do |config|
@@ -24,7 +24,7 @@ RSpec.configure do |config|
   # order dependency and want to debug it, you can fix the order by providing
   # the seed, which is printed after each run.
   #     --seed 1234
-  config.order = 'random'
+  config.order = "random"
 
   # configure specs
 
@@ -35,7 +35,6 @@ RSpec.configure do |config|
   # Horrible shameful hack TODO FIXME
   # We can't include a lot of the SQL code until we configure things, because
   # we inherit from Model e.g.
-  # class Users < Sequel::Model(:users) 
-  require 'chef_fixie'
+  # class Users < Sequel::Model(:users)
+  require "chef_fixie"
 end
-

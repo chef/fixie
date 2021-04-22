@@ -1,7 +1,7 @@
 # coding: utf-8
-lib = File.expand_path('../lib', __FILE__)
+lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'chef_fixie/version'
+require "chef_fixie/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "chef_fixie"
@@ -13,9 +13,9 @@ Gem::Specification.new do |spec|
   spec.licenses      = "Apache2"
   spec.homepage      = "https://github.com/chef/fixie"
 
-  spec.files         = %w(LICENSE README.md fixie.conf.example) + Dir.glob("{bin,doc,lib,spec}/**/*")
-  spec.bindir        = 'bin'
-  spec.executables   = 'chef_fixie'
+  spec.files         = %w{LICENSE README.md fixie.conf.example} + Dir.glob("{bin,doc,lib,spec}/**/*")
+  spec.bindir        = "bin"
+  spec.executables   = "chef_fixie"
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
@@ -25,7 +25,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "pry", "~> 0.10.1"
   spec.add_runtime_dependency "sequel", "~> 4.11"
   spec.add_runtime_dependency "uuidtools", "~> 2.1", ">= 2.1.3"
-  spec.add_runtime_dependency 'veil'
+  spec.add_runtime_dependency "veil"
 
   spec.add_development_dependency "rake", "~> 0"
   spec.add_development_dependency "rspec", "~> 0"

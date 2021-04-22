@@ -17,16 +17,16 @@
 # Author: Mark Anderson <mark@chef.io>
 #
 
-require 'pp'
-require 'ffi_yajl'
-require 'chef/http'
+require "pp"
+require "ffi_yajl"
+require "chef/http"
 
-require_relative 'config'
+require_relative "config"
 
 module ChefFixie
 
   class AuthzApi
-    def initialize(user=nil)
+    def initialize(user = nil)
       @requestor_authz = user ? user : ChefFixie.configure { |x| x.superuser_id }
       @auth_uri ||= ChefFixie.configure { |x| x.authz_uri }
       @rest = Chef::HTTP.new(@auth_uri)
@@ -42,38 +42,41 @@ module ChefFixie
 
     def get(resource)
       result = @rest.get(resource,
-                         'Content-Type'=>'application/json',
-                         'Accept'=>'application/json',
-                         'X-Ops-Requesting-Actor-Id'=>@requestor_authz)
+                         "Content-Type" => "application/json",
+                         "Accept" => "application/json",
+                         "X-Ops-Requesting-Actor-Id" => @requestor_authz)
       FFI_Yajl::Parser.parse(result)
     end
+
     def put(resource, data)
-      result = @rest.put(resource, self.json_helper(data),
-                         'Content-Type'=>'application/json',
-                         'Accept'=>'application/json',
-                         'X-Ops-Requesting-Actor-Id'=>@requestor_authz)
+      result = @rest.put(resource, json_helper(data),
+                         "Content-Type" => "application/json",
+                         "Accept" => "application/json",
+                         "X-Ops-Requesting-Actor-Id" => @requestor_authz)
       FFI_Yajl::Parser.parse(result)
     end
+
     def post(resource, data)
-      result = @rest.post(resource, self.json_helper(data),
-                          'Content-Type'=>'application/json',
-                          'Accept'=>'application/json',
-                          'X-Ops-Requesting-Actor-Id'=>@requestor_authz)
+      result = @rest.post(resource, json_helper(data),
+                          "Content-Type" => "application/json",
+                          "Accept" => "application/json",
+                          "X-Ops-Requesting-Actor-Id" => @requestor_authz)
       FFI_Yajl::Parser.parse(result)
     end
+
     def delete(resource)
       result = @rest.delete(resource,
-                            'Content-Type'=>'application/json',
-                            'Accept'=>'application/json',
-                            'X-Ops-Requesting-Actor-Id'=>@requestor_authz)
+                            "Content-Type" => "application/json",
+                            "Accept" => "application/json",
+                            "X-Ops-Requesting-Actor-Id" => @requestor_authz)
       FFI_Yajl::Parser.parse(result)
     end
 
   end
 
   module AuthzUtils
-    Types = [:object,:actor,:group,:container] # order is an attempt to optimize by most probable.
-    Actions = [:create, :read, :update, :delete, :grant]
+    TYPES = [:object, :actor, :group, :container] # order is an attempt to optimize by most probable.
+    ACTIONS = [:create, :read, :update, :delete, :grant]
 
     def to_resource(t)
       # This is a rails thing... t.to_s.pluralize
@@ -81,20 +84,20 @@ module ChefFixie
     end
 
     def get_type(id)
-      Types.each do |t|
+      TYPES.each do |t|
         begin
-          r = AuthzApi.get("#{self.to_resource(t)}/#{id}")
+          r = AuthzApi.get("#{to_resource(t)}/#{id}")
           return t
-        rescue RestClient::ResourceNotFound=>e
+        rescue RestClient::ResourceNotFound => e
           # expected if not found
         end
       end
-      return :none
+      :none
     end
 
     def check_action(action)
       # TODO Improve; stack trace isn't the best way to communicate with the user
-      raise "#{action} not one of #{Actions.join(', ')} " if !Actions.member?(action)
+      raise "#{action} not one of #{ACTIONS.join(', ')} " if !ACTIONS.member?(action)
     end
 
     def check_actor_or_group(a_or_g)
@@ -102,7 +105,7 @@ module ChefFixie
     end
 
     def resourcify_actor_or_group(a_or_g)
-      return a_or_g if ["actors", "groups"].member?(a_or_g)
+      return a_or_g if %w{actors groups}.member?(a_or_g)
       check_actor_or_group(a_or_g)
       to_resource(a_or_g)
     end
@@ -131,9 +134,8 @@ module ChefFixie
     end
 
     def authz_api
-       @@authz_apiAsSuperUser ||= AuthzApi.new
+      @@authz_api_as_superuser ||= AuthzApi.new
     end
-
 
     # we expect to be mixed in with a class that has the authz_id method
     def prefix
@@ -152,6 +154,7 @@ module ChefFixie
     def acl_raw
       authz_api.get("#{prefix}/acl")
     end
+
     # Todo: filter this by scope and type
     def acl
       ChefFixie::AuthzMapper.struct_to_name(acl_raw)
@@ -165,11 +168,11 @@ module ChefFixie
       [resource, ace]
     end
 
-
     def ace_raw(action)
-      resource,ace = ace_get_util(action)
+      resource, ace = ace_get_util(action)
       ace
     end
+
     # Todo: filter this by scope and type
     def ace(action)
       ChefFixie::AuthzMapper.struct_to_name(ace_raw(action))
@@ -177,14 +180,11 @@ module ChefFixie
 
     def expand_actions(action)
       if action == :all
-        action = AuthzUtils::Actions
+        action = AuthzUtils::ACTIONS
       end
       action.is_a?(Array) ? action : [action]
-    end
+    end # add actor or group to acl
 
-
-
-    # add actor or group to acl
     def ace_add_raw(action, actor_or_group, entity)
       # groups or actors
       a_or_g_resource = resourcify_actor_or_group(actor_or_group)
@@ -194,9 +194,10 @@ module ChefFixie
       ace[a_or_g_resource].uniq!
       authz_api.put("#{resource}", ace)
     end
+
     def ace_add(action, entity)
       actions = expand_actions(action)
-      actions.each {|a| ace_add_raw(a, entity.type, entity) }
+      actions.each { |a| ace_add_raw(a, entity.type, entity) }
     end
 
     def ace_delete_raw(action, actor_or_group, entity)
@@ -211,7 +212,7 @@ module ChefFixie
 
     def ace_delete(action, entity)
       actions = expand_actions(action)
-      actions.each {|a| ace_delete_raw(a, entity.type, entity) }
+      actions.each { |a| ace_delete_raw(a, entity.type, entity) }
     end
 
     def ace_member?(action, entity)
@@ -219,7 +220,6 @@ module ChefFixie
       resource, ace = ace_get_util(action)
       ace[a_or_g_resource].member?(entity.authz_id)
     end
-
 
     def acl_add_from_object(object)
       src = object.acl_raw
@@ -258,18 +258,21 @@ module ChefFixie
     def group_raw
       authz_api.get("#{prefix}")
     end
+
     # Todo: filter this by scope and type
     def group
       ChefFixie::AuthzMapper.struct_to_name(group_raw)
     end
+
     def list
       group
     end
 
     def group_add_raw(actor_or_group, entity)
       entity_resource = to_resource(actor_or_group)
-      authz_api.put("#{prefix}/#{entity_resource}/#{entity.authz_id}",{})
+      authz_api.put("#{prefix}/#{entity_resource}/#{entity.authz_id}", {})
     end
+
     def group_add(entity)
       group_add_raw(entity.type, entity)
     end
@@ -285,7 +288,7 @@ module ChefFixie
 
     def member?(entity)
       members = group_raw
-      return members[resourcify_actor_or_group(entity.type)].member?(entity.authz_id)
+      members[resourcify_actor_or_group(entity.type)].member?(entity.authz_id)
     end
   end
 

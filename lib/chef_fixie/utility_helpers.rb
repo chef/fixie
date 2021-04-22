@@ -18,42 +18,46 @@
 # Author: Mark Anderson <mark@chef.io>
 #
 
-require_relative 'config'
-require_relative 'authz_objects'
-require_relative 'authz_mapper'
+require_relative "config"
+require_relative "authz_objects"
+require_relative "authz_mapper"
 
 module ChefFixie
   module UtilityHelpers
     def self.orgs
       @orgs ||= ChefFixie::Sql::Orgs.new
     end
+
     def self.users
       @users ||= ChefFixie::Sql::Users.new
     end
+
     def self.assocs
       @assocs ||= ChefFixie::Sql::Associations.new
     end
+
     def self.invites
       invites ||= ChefFixie::Sql::Invites.new
     end
 
     def self.make_user(user)
       if user.is_a?(String)
-        return users[user]
+        users[user]
       elsif user.is_a?(ChefFixie::Sql::User)
-        return user
+        user
       else
         raise Exception "Expected a user, got a #{user.class}"
       end
-    end      
+    end
+
     def self.make_org(org)
       if org.is_a?(String)
-        return orgs[org]
+        orgs[org]
       elsif org.is_a?(ChefFixie::Sql::Org)
-        return org
+        org
       else
         raise Exception "Expected an org, got a #{org.class}"
       end
-    end      
+    end
   end
 end

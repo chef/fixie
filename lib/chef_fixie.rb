@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2014-2015 Chef Software Inc. 
+# Copyright (c) 2014-2015 Chef Software Inc.
 # License :: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,13 +16,13 @@
 #
 # Author: Mark Anderson <mark@chef.io>
 
-require 'sequel'
-require_relative 'chef_fixie/config'
-require_relative 'chef_fixie/sql'
-require_relative 'chef_fixie/sql_objects'
+require "sequel"
+require_relative "chef_fixie/config"
+require_relative "chef_fixie/sql"
+require_relative "chef_fixie/sql_objects"
 
 # This doesn't work because of initialization order, figure it out.
-require_relative 'chef_fixie/check_org_associations'
-require_relative 'chef_fixie/bulk_edit_permissions'
+require_relative "chef_fixie/check_org_associations"
+require_relative "chef_fixie/bulk_edit_permissions"
 
 Sequel.extension :inflector
