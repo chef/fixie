@@ -3,4 +3,3 @@
 *               @chef/chef-infra-server-reviewers @chef/chef-infra-server-approvers @chef/chef-infra-server-owners
 .expeditor/     @chef/releng-ops
 *.md            @chef/docs-team
-docs-chef-io/   @chef/docs-team
