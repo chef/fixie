@@ -1,10 +1,10 @@
 # coding: utf-8
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "chef_fixie/version"
+require "chef_fixie_shahid/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "chef_fixie"
+  spec.name          = "chef_fixie_shahid"
   spec.version       = ChefFixie::VERSION
   spec.authors       = ["Mark Anderson"]
   spec.email         = ["mark@chef.io"]
