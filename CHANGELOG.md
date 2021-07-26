@@ -1,9 +1,17 @@
 # chef_fix Changelog
 
-<!-- latest_release -->
+<!-- latest_release 1.0.0 -->
+## [v1.0.0](https://github.com/chef/fixie/tree/v1.0.0) (2021-07-26)
+
+#### Merged Pull Requests
+- Update pg dependency from .17 to ~&gt; 1.2 / &gt;= 1.2.3 [#53](https://github.com/chef/fixie/pull/53) ([jashaik](https://github.com/jashaik))
 <!-- latest_release -->
 
-<!-- release_rollup -->
+<!-- release_rollup since=0.5.1 -->
+### Changes not yet released to rubygems.org
+
+#### Merged Pull Requests
+- Update pg dependency from .17 to ~&gt; 1.2 / &gt;= 1.2.3 [#53](https://github.com/chef/fixie/pull/53) ([jashaik](https://github.com/jashaik)) <!-- 1.0.0 -->
 <!-- release_rollup -->
 
 <!-- latest_stable_release -->
