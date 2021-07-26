@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = ChefFixie::VERSION
   spec.authors       = ["Mark Anderson"]
   spec.email         = ["mark@chef.io"]
-  spec.description   = %q{Low level manipulation tool for Chef Server 12 and later}
+  spec.description   = %q{Low level manipulation tool for Chef Infra Server}
   spec.summary       = spec.description
-  spec.licenses      = "Apache2"
+  spec.licenses      = "Apache-2.0"
   spec.homepage      = "https://github.com/chef/fixie"
 
   spec.files         = %w{LICENSE README.md fixie.conf.example} + Dir.glob("{bin,doc,lib,spec}/**/*")
@@ -19,14 +19,11 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_runtime_dependency "chef", ">= 15.2"
+  spec.add_runtime_dependency "chef", ">= 16"
   spec.add_runtime_dependency "ffi-yajl", ">= 1.2.0"
   spec.add_runtime_dependency "pg", "~> 1.2", ">= 1.2.3"
   spec.add_runtime_dependency "pry", "~> 0.13"
   spec.add_runtime_dependency "sequel", "~> 4.11"
   spec.add_runtime_dependency "uuidtools", "~> 2.1", ">= 2.1.3"
   spec.add_runtime_dependency "veil"
-
-  spec.add_development_dependency "rake", "~> 0"
-  spec.add_development_dependency "rspec", "~> 0"
 end
