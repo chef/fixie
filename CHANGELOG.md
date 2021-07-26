@@ -1,16 +1,17 @@
 # chef_fix Changelog
 
-<!-- latest_release 1.0.1 -->
-## [v1.0.1](https://github.com/chef/fixie/tree/v1.0.1) (2021-07-26)
+<!-- latest_release 1.0.2 -->
+## [v1.0.2](https://github.com/chef/fixie/tree/v1.0.2) (2021-07-26)
 
 #### Merged Pull Requests
-- Cleanup the fixie gemspec [#55](https://github.com/chef/fixie/pull/55) ([tas50](https://github.com/tas50))
+- Pin chef in gemfile when testing on Ruby 2.6 [#56](https://github.com/chef/fixie/pull/56) ([tas50](https://github.com/tas50))
 <!-- latest_release -->
 
 <!-- release_rollup since=0.5.1 -->
 ### Changes not yet released to rubygems.org
 
 #### Merged Pull Requests
+- Pin chef in gemfile when testing on Ruby 2.6 [#56](https://github.com/chef/fixie/pull/56) ([tas50](https://github.com/tas50)) <!-- 1.0.2 -->
 - Cleanup the fixie gemspec [#55](https://github.com/chef/fixie/pull/55) ([tas50](https://github.com/tas50)) <!-- 1.0.1 -->
 - Update pg dependency from .17 to ~&gt; 1.2 / &gt;= 1.2.3 [#53](https://github.com/chef/fixie/pull/53) ([jashaik](https://github.com/jashaik)) <!-- 1.0.0 -->
 <!-- release_rollup -->
