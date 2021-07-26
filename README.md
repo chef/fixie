@@ -1,7 +1,6 @@
-fixie
-=====
+# fixie
 
-Low level manipulation tool for Chef Server 12 and later.
+Low level manipulation tool for Chef Infra Server.
 
 This tool is in its very early stages, and should be used with great care.
 
@@ -47,14 +46,14 @@ github.
 
 |                      |                                          |
 |:---------------------|:-----------------------------------------|
-| **Copyright:**       | Copyright (c) 2014-2015 Chef Software, Inc.
+| **Copyright:**       | Copyright:: Chef Software, Inc.
 | **License:**         | Apache License, Version 2.0
 
 
 All files in the repository are licensed under the Apache 2.0 license. If any file is missing the License
 header it should assume the following is attached;
 
-Copyright 2014 Chef Software Inc.
+Copyright:: Chef Software Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
