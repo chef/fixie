@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "ffi-yajl", ">= 1.2.0"
   spec.add_runtime_dependency "pg", "~> 1.2", ">= 1.2.3"
   spec.add_runtime_dependency "pry", "~> 0.13"
-  spec.add_runtime_dependency "sequel", "~> 4.11"
+  spec.add_runtime_dependency "sequel"
   spec.add_runtime_dependency "uuidtools", "~> 2.1", ">= 2.1.3"
   spec.add_runtime_dependency "veil"
 end
