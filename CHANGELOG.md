@@ -7,9 +7,11 @@
 <!-- release_rollup -->
 
 <!-- latest_stable_release -->
-## [v1.0.2](https://github.com/chef/fixie/tree/v1.0.2) (2021-07-26)
+## [v1.0.3](https://github.com/chef/fixie/tree/v1.0.3) (2021-07-26)
 
 #### Merged Pull Requests
+- Merge pull request #57 from chef/zei/update_sequel_to_5.9 
+- Merge pull request #59 from chef/update_expeditor 
 - Update pg dependency from .17 to ~&gt; 1.2 / &gt;= 1.2.3 [#53](https://github.com/chef/fixie/pull/53) ([jashaik](https://github.com/jashaik))
 - Cleanup the fixie gemspec [#55](https://github.com/chef/fixie/pull/55) ([tas50](https://github.com/tas50))
 - Pin chef in gemfile when testing on Ruby 2.6 [#56](https://github.com/chef/fixie/pull/56) ([tas50](https://github.com/tas50))
