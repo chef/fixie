@@ -5,8 +5,8 @@
 #
 
 set -evx
-VERSION=$(cat VERSION)
-sed -i -r "s/^(\s*)VERSION = \".+\"/\1VERSION = \"${VERSION}\"/" lib/chef_fixie/version.rb
+
+sed -i -r "s/^(\s*)VERSION = \".+\"/\1VERSION = \"$(cat VERSION)\"/" lib/chef_fixie/version.rb
 
 # Once Expeditor finshes executing this script, it will commit the changes and push
 # the commit as a new tag corresponding to the value in the VERSION file.
