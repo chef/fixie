@@ -1,16 +1,17 @@
 # chef_fix Changelog
 
-<!-- latest_release 1.0.4 -->
-## [v1.0.4](https://github.com/chef/fixie/tree/v1.0.4) (2021-10-27)
+<!-- latest_release 1.0.5 -->
+## [v1.0.5](https://github.com/chef/fixie/tree/v1.0.5) (2021-10-27)
 
 #### Merged Pull Requests
-- test expeditor again [#62](https://github.com/chef/fixie/pull/62) ([nkierpiec](https://github.com/nkierpiec))
+- add alias [#63](https://github.com/chef/fixie/pull/63) ([nkierpiec](https://github.com/nkierpiec))
 <!-- latest_release -->
 
 <!-- release_rollup since=1.0.3 -->
 ### Changes not yet released to rubygems.org
 
 #### Merged Pull Requests
+- add alias [#63](https://github.com/chef/fixie/pull/63) ([nkierpiec](https://github.com/nkierpiec)) <!-- 1.0.5 -->
 - test expeditor again [#62](https://github.com/chef/fixie/pull/62) ([nkierpiec](https://github.com/nkierpiec)) <!-- 1.0.4 -->
 <!-- release_rollup -->
 
