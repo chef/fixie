@@ -1,5 +1,8 @@
 # Documentation available at https://expeditor.chef.io/docs/getting-started/
 ---
+project:
+  alias: chef-fixie
+
 # Slack channel in Chef Software slack to send notifications about build failures, etc
 slack:
   notify_channel: chef-server-notify
