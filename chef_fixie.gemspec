@@ -19,11 +19,12 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_runtime_dependency "chef", ">= 16"
-  spec.add_runtime_dependency "ffi-yajl", ">= 1.2.0"
-  spec.add_runtime_dependency "pg", "~> 1.2", ">= 1.2.3"
-  spec.add_runtime_dependency "pry", "~> 0.13"
-  spec.add_runtime_dependency "sequel", ">= 4.11"
-  spec.add_runtime_dependency "uuidtools", "~> 2.1", ">= 2.1.3"
+  spec.add_runtime_dependency "chef", ">= 17"
+  spec.add_runtime_dependency "ffi-yajl", ">= 2.4.0"
+  spec.add_runtime_dependency "pg", "~> 1.4", ">= 1.4.1"
+  spec.add_runtime_dependency "pry", "~> 0.14"
+  spec.add_runtime_dependency "sequel", ">= 5.58.0"
+  spec.add_runtime_dependency "uuidtools", "~> 2.2", ">= 2.2.0"
+  spec.add_runtime_dependency "bcrypt", "~> 3.1.18"
   spec.add_runtime_dependency "veil"
 end

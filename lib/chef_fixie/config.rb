@@ -102,8 +102,8 @@ module ChefFixie
     def load_from_pc(dir = "/etc/opscode")
       configdir = Pathname.new(dir)
 
-      config_files = %w{chef-server-running.json}
-      config = load_json_from_path([configdir], config_files)
+      #config_files = %w{chef-server-running.json}
+      config = load_json_from_path([configdir], %w{chef-server-running.json} )
 
       secrets = load_secrets_from_path([configdir], %w{private-chef-secrets.json} )
 
