@@ -1,6 +1,6 @@
 source :rubygems
 
-gem "veil", git: "https://github.com/chef/chef_secrets", branch: "main"
+gem "veil"
 gemspec
 
 # TODO: remove when we drop ruby 2.6

@@ -65,7 +65,7 @@ module ChefFixie
     end
 
     def configure_pry
-      Pry.config.history.file = "~/.fixie_history"
+      Pry.config.history_file = "~/.fixie_history"
       Pry.config.prompt_name = "fixie"
       Pry::Commands.block_command("fixie-help", "Show fixie's help") do
         output.puts(<<-HALP)
