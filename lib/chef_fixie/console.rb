@@ -29,8 +29,9 @@ module ChefFixie
   module Console
     extend self
 
+    @@started_from_command_line = true
+
     def start
-      @@started_from_command_line = true
       configure
       ChefFixie.setup
       configure_pry
