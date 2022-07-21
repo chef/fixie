@@ -22,6 +22,7 @@ require "singleton"
 require "ffi_yajl"
 require "pathname"
 require "veil"
+require_relative "console"
 
 module ChefFixie
   def self.configure
