@@ -26,7 +26,7 @@ Running fixie
 
 Start fixie with
 ```shell
-bin/fixie fixie.conf
+bin/chef_fixie fixie.conf
 ```
 The config file is optional, leaving it out will attempt to read
 /etc/opscode for configuration.
