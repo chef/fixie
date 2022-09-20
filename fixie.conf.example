@@ -1,5 +1,5 @@
 
-Fixie.configure do |mapper|
+ChefFixie.configure do |mapper|
   mapper.authz_uri = "http://localhost:9463"
   mapper.superuser_id = "33d88ba14277f812a3ef3989869fb393"
   mapper.sql_database = 'postgres://opscode_chef:6c6e1a140828be4ac406848e0b6a2ae1e9845e45ac4f48c790168c681c1b4217dc27ab99599130449a2437ab0d2a300bed5d@localhost/opscode_chef'
