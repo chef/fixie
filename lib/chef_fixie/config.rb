@@ -102,14 +102,14 @@ module ChefFixie
 
     def load_from_pc(dir = "/etc/opscode")
       configdir = Pathname.new(dir)
-      puts "Loading configdir: #{configdir}..." 
+      #puts "Loading configdir: #{configdir}..." 
 
       config_files = %w{chef-server-running.json}
       config = load_json_from_path([configdir], config_files)
 
       secrets = load_secrets_from_path([configdir], %w{private-chef-secrets.json} )
-      puts "Loading config: #{config}..." 
-      puts "Loading authz config: #{config["private_chef"]["oc_bifrost"]}..." 
+      #puts "Loading config: #{config}..." 
+      #puts "Loading authz config: #{config["private_chef"]["oc_bifrost"]}..." 
 
       authz_config = config["private_chef"]["oc_bifrost"]
       authz_vip = authz_config["vip"]
