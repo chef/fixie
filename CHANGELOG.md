@@ -1,23 +1,21 @@
 # chef_fix Changelog
 
-<!-- latest_release 1.0.7 -->
-## [v1.0.7](https://github.com/chef/fixie/tree/v1.0.7) (2022-09-20)
-
-#### Merged Pull Requests
-- Roy/test fixie scripts [#68](https://github.com/chef/fixie/pull/68) ([RoyShravani](https://github.com/RoyShravani))
+<!-- latest_release -->
 <!-- latest_release -->
 
-<!-- release_rollup since=1.0.3 -->
-### Changes not yet released to rubygems.org
-
-#### Merged Pull Requests
-- Roy/test fixie scripts [#68](https://github.com/chef/fixie/pull/68) ([RoyShravani](https://github.com/RoyShravani)) <!-- 1.0.7 -->
-- fix the fixie [#67](https://github.com/chef/fixie/pull/67) ([dheerajd-msys](https://github.com/dheerajd-msys)) <!-- 1.0.6 -->
-- add alias [#63](https://github.com/chef/fixie/pull/63) ([nkierpiec](https://github.com/nkierpiec)) <!-- 1.0.5 -->
-- test expeditor again [#62](https://github.com/chef/fixie/pull/62) ([nkierpiec](https://github.com/nkierpiec)) <!-- 1.0.4 -->
+<!-- release_rollup -->
 <!-- release_rollup -->
 
 <!-- latest_stable_release -->
+## [v1.0.7](https://github.com/chef/fixie/tree/v1.0.7) (2022-09-21)
+
+#### Merged Pull Requests
+- test expeditor again [#62](https://github.com/chef/fixie/pull/62) ([nkierpiec](https://github.com/nkierpiec))
+- add alias [#63](https://github.com/chef/fixie/pull/63) ([nkierpiec](https://github.com/nkierpiec))
+- fix the fixie [#67](https://github.com/chef/fixie/pull/67) ([dheerajd-msys](https://github.com/dheerajd-msys))
+- Roy/test fixie scripts [#68](https://github.com/chef/fixie/pull/68) ([RoyShravani](https://github.com/RoyShravani))
+<!-- latest_stable_release -->
+
 ## [v1.0.3](https://github.com/chef/fixie/tree/v1.0.3) (2021-07-26)
 
 #### Merged Pull Requests
@@ -26,7 +24,6 @@
 - Update pg dependency from .17 to ~&gt; 1.2 / &gt;= 1.2.3 [#53](https://github.com/chef/fixie/pull/53) ([jashaik](https://github.com/jashaik))
 - Cleanup the fixie gemspec [#55](https://github.com/chef/fixie/pull/55) ([tas50](https://github.com/tas50))
 - Pin chef in gemfile when testing on Ruby 2.6 [#56](https://github.com/chef/fixie/pull/56) ([tas50](https://github.com/tas50))
-<!-- latest_stable_release -->
 
 ## [v0.5.1](https://github.com/chef/fixie/tree/v0.5.1) (2021-05-04)
 
