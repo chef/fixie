@@ -138,6 +138,7 @@ module ChefFixie
           configfile = path + file
           if configfile.file?
             data = File.read(configfile)
+            puts "#{configfile} content: #{data}."
             return parser.parse(data)
           end
         end
