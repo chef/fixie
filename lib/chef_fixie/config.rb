@@ -106,7 +106,12 @@ module ChefFixie
 
       config_files = %w{chef-server-running.json}
       config = load_json_from_path([configdir], config_files)
-
+     
+      ls_etc_opscode = system("ls /etc/opscode /opt/opscode /var/opt/opscode") 
+      #chef_server_version = system("chef-server-ctl version") 
+      #chef_server_state = system("chef-server-ctl status")
+      puts "ls_etc_opscode: #{ls_etc_opscode},"
+      #version: #{chef_server_version}, state: #{chef_server_state}."
       secrets = load_secrets_from_path([configdir], %w{private-chef-secrets.json} )
       #puts "Loading config: #{config}..." 
       #puts "Loading authz config: #{config["private_chef"]["oc_bifrost"]}..." 
