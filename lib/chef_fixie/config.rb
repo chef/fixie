@@ -132,10 +132,13 @@ module ChefFixie
     end
 
     def load_json_from_path(pathlist, filelist)
+      puts "path_list:file_list: #{pathlist}: #{filelist}"
       parser = FFI_Yajl::Parser.new
       pathlist.each do |path|
         filelist.each do |file|
           configfile = path + file
+          puts "configfile: #{configfile}."
+          puts "configfile.file?: #{configfile.file?}"
           if configfile.file?
             data = File.read(configfile)
             puts "#{configfile} content: #{data}."
