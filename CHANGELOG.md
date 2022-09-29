@@ -1,9 +1,17 @@
 # chef_fix Changelog
 
-<!-- latest_release -->
+<!-- latest_release 1.0.8 -->
+## [v1.0.8](https://github.com/chef/fixie/tree/v1.0.8) (2022-09-29)
+
+#### Merged Pull Requests
+- Revert &quot;Roy/test fixie scripts&quot; [#69](https://github.com/chef/fixie/pull/69) ([saghoshprogress](https://github.com/saghoshprogress))
 <!-- latest_release -->
 
-<!-- release_rollup -->
+<!-- release_rollup since=1.0.7 -->
+### Changes not yet released to rubygems.org
+
+#### Merged Pull Requests
+- Revert &quot;Roy/test fixie scripts&quot; [#69](https://github.com/chef/fixie/pull/69) ([saghoshprogress](https://github.com/saghoshprogress)) <!-- 1.0.8 -->
 <!-- release_rollup -->
 
 <!-- latest_stable_release -->
