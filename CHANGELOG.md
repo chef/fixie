@@ -1,20 +1,18 @@
 # chef_fix Changelog
 
-<!-- latest_release 1.0.8 -->
+<!-- latest_release -->
+<!-- latest_release -->
+
+<!-- release_rollup -->
+<!-- release_rollup -->
+
+<!-- latest_stable_release -->
 ## [v1.0.8](https://github.com/chef/fixie/tree/v1.0.8) (2022-09-29)
 
 #### Merged Pull Requests
 - Revert &quot;Roy/test fixie scripts&quot; [#69](https://github.com/chef/fixie/pull/69) ([saghoshprogress](https://github.com/saghoshprogress))
-<!-- latest_release -->
-
-<!-- release_rollup since=1.0.7 -->
-### Changes not yet released to rubygems.org
-
-#### Merged Pull Requests
-- Revert &quot;Roy/test fixie scripts&quot; [#69](https://github.com/chef/fixie/pull/69) ([saghoshprogress](https://github.com/saghoshprogress)) <!-- 1.0.8 -->
-<!-- release_rollup -->
-
 <!-- latest_stable_release -->
+
 ## [v1.0.7](https://github.com/chef/fixie/tree/v1.0.7) (2022-09-21)
 
 #### Merged Pull Requests
@@ -22,7 +20,6 @@
 - add alias [#63](https://github.com/chef/fixie/pull/63) ([nkierpiec](https://github.com/nkierpiec))
 - fix the fixie [#67](https://github.com/chef/fixie/pull/67) ([dheerajd-msys](https://github.com/dheerajd-msys))
 - Roy/test fixie scripts [#68](https://github.com/chef/fixie/pull/68) ([RoyShravani](https://github.com/RoyShravani))
-<!-- latest_stable_release -->
 
 ## [v1.0.3](https://github.com/chef/fixie/tree/v1.0.3) (2021-07-26)
 
